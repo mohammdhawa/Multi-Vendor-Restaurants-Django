@@ -1,0 +1,10 @@
+{% autoescape off %}
+
+    Hi {{ user.first_name }},
+
+    Please click on the link below to verify your account.
+    http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+    http://127.0.0.1:8000/activate/1/1234567890/1234567890/
+
+{% endautoescape %}
