@@ -9,7 +9,7 @@
       <change beforePath="$PROJECT_DIR$/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/navbar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +22,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -113,7 +113,14 @@
       <workItem from="1745845075444" duration="8000" />
       <workItem from="1745847193423" duration="6961000" />
       <workItem from="1745941497917" duration="1000" />
-      <workItem from="1745960894935" duration="969000" />
+      <workItem from="1745960894935" duration="2008000" />
+      <workItem from="1746085991535" duration="2000" />
+      <workItem from="1746086887101" duration="23000" />
+      <workItem from="1746090190869" duration="4000" />
+      <workItem from="1746106066561" duration="2000" />
+      <workItem from="1746111427114" duration="4834000" />
+      <workItem from="1746185680994" duration="37000" />
+      <workItem from="1746194930724" duration="3573000" />
     </task>
     <servers />
   </component>

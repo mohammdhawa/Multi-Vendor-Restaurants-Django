@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1 class="m-5">Vendor Page</h1>
+    <h4>Welcome {{ user.username }}</h4>
+    <p>This is a {{ user.get_role }}</p>
+    {% include 'includes/alerts.html' %}
+
+
+    <a href="{% url 'logout' %}">Logout</a>
+
+{% endblock body %}
