@@ -48,3 +48,19 @@ def send_reset_password_email(request, user):
     to_email = user.email
     mail = EmailMessage(mail_subject, message, from_email, to=[to_email])
     mail.send()
+
+
+def send_vendor_account_status_email(user, is_approved):
+    from_email = settings.DEFAULT_FROM_EMAIL
+    mail_subject = (
+        'Your Vendor Account Has Been Approved'
+        if is_approved else
+        'Your Vendor Account Application Was Rejected'
+    )
+    message = render_to_string('accounts/emails/admin_approval_email.html', {
+        'user': user,
+        'is_approved': is_approved,
+    })
+    to_email = user.email
+    mail = EmailMessage(mail_subject, message, from_email, to=[to_email])
+    mail.send()
