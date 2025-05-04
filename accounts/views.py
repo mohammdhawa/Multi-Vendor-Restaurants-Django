@@ -13,6 +13,7 @@ from .utils import detect_user, send_verification_email, send_reset_password_ema
 from vendor.forms import VendorForm
 from .forms import UserForm
 from .models import User
+from vendor.models import Vendor
 
 
 # Restrict the vendor from accessing the customer dashboard
@@ -145,8 +146,13 @@ def customer_dashboard(request):
 @login_required
 @user_passes_test(check_role_vendor)
 def vendor_dashboard(request):
+    vendor = Vendor.objects.get(user=request.user)
 
-    return render(request, 'accounts/vendorDashboard.html', {})
+    context = {
+        'vendor': vendor,
+    }
+
+    return render(request, 'accounts/vendorDashboard.html', context)
 
 
 @login_required
