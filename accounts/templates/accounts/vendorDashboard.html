@@ -17,7 +17,7 @@
 
     		<!-- Main Section Start -->
 		<div class="main-section">
-			<div class="page-section restaurant-detail-image-section" style=" background: url({% static 'assets/extra-images/cover-photo01.jpg' %}) no-repeat scroll 0 0 / cover;">
+			<div class="page-section restaurant-detail-image-section" style=" background: url({{ vendor.user.profile.cover_picture.url }}) no-repeat scroll 0 0 / cover;">
 				<!-- Container Start -->
 				<div class="container">
 					<!-- Row Start -->
@@ -28,15 +28,15 @@
 								<div class="company-info">
 									<div class="img-holder">
 										<figure>
-											<img src="{% static 'assets/extra-images/listing-logo18.png' %}" alt="">
+											<img src="{{ vendor.user.profile.profile_picture.url }}" alt="">
 										</figure>
 									</div>
 
 									<div class="text-holder">
-										<span class="restaurant-title">Restaurant Demo</span>
+										<span class="restaurant-title">{{ vendor.vendor_name }}</span>
 										<div class="text">
 											<i class="icon-location"></i>
-											<p>Mark ricardo road, lane 27, Austin, Texas, USA.</p>
+											<p>{{ vendor.user.profile.address_line1}} <br> {{ vendor.user.profile.address_line2 }}</p>
 										</div>
 									</div>
 								</div>
@@ -58,6 +58,44 @@
 						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 							<div class="user-dashboard loader-holder">
 								<div class="user-holder">
+                                    <h5 class="text-uppercase">Overview</h5>
+                                    <div class="row h3 text-center">
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    Total Orders
+                                                </div>
+                                                <div class="card-body text-center">
+                                                    <a href="#" style="color: black; text-decoration: none;"><h3 class="card-title">$165.0</h3></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    Total Revenue
+                                                </div>
+                                                <div class="card-body text-center">
+                                                    <a href="#" style="color: black; text-decoration: none;"><h3 class="card-title">$165.0</h3></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    This Month
+                                                </div>
+                                                <div class="card-body text-center">
+                                                    <a href="#" style="color: black; text-decoration: none;"><h3 class="card-title">$165.0</h3></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
 
 									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 										<div class="row">

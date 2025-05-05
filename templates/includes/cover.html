@@ -1,5 +1,5 @@
 {% load static %}
-<div class="page-section restaurant-detail-image-section" style=" background: url({% if vendor.user_profile.cover_photo %} {{ vendor.user_profile.cover_photo.url }} {% else %} {% static 'assets/images/default-cover.png' %}{% endif %}) no-repeat scroll 0 0 / cover;">
+<div class="page-section restaurant-detail-image-section" style=" background: url({% if vendor.user.profile.cover_picture %} {{ vendor.user.profile.cover_picture.url }} {% else %} {% static 'assets/images/default-cover.png' %}{% endif %}) no-repeat scroll 0 0 / cover;">
     <!-- Container Start -->
     <div class="container">
         <!-- Row Start -->
@@ -10,8 +10,8 @@
                     <div class="company-info">
                         <div class="img-holder">
                             <figure>
-                                {% if vendor.user_profile.profile_picture %}
-                                <img src="{{ vendor.user_profile.profile_picture.url }}" alt="">
+                                {% if vendor.user.profile.profile_picture %}
+                                <img src="{{ vendor.user.profile.profile_picture.url }}" alt="">
                                 {% else %}
                                 <img src="{% static 'assets/images/default-profile.png' %}" alt="">
                                 {% endif %}
