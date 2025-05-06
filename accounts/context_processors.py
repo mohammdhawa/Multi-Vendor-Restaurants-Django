@@ -1,3 +1,4 @@
+from project import settings
 from vendor.models import Vendor
 
 def get_vendor(request):
@@ -11,3 +12,7 @@ def get_vendor(request):
     }
 
     return context
+
+
+def get_google_api(request):
+    return {'GOOGLE_API_KEY': settings.GOOGLE_API_KEY}
