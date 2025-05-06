@@ -36,7 +36,7 @@
 																					{% if profile.profile_picture %}
 																					<img class="thumbnail" src="{{profile.profile_picture.url}}" alt="Profile Picture">
 																					{% else %}
-																					<img class="thumbnail" src="{% static 'assets/images/default-profile.png' %}" alt="Profile Picture">
+																					<img class="thumbnail" src="{% static 'images/default-profile.png' %}" alt="Profile Picture">
 																					{% endif %}
 																				</div>
 																			</div>
@@ -59,10 +59,10 @@
 																		<li class="gal-img">
 																			<div class="drag-list">
 																				<div class="item-thumb">
-																					{% if profile.cover_photo %}
-																					<img class="thumbnail" src="{{profile.cover_photo.url}}" alt="Cover Photo">
+																					{% if profile.cover_picture %}
+																					<img class="thumbnail" src="{{profile.cover_picture.url}}" alt="Cover Photo">
 																					{% else %}
-																					<img class="thumbnail" src="{% static 'assets/images/default-cover.png' %}" alt="Cover Photo">
+																					<img class="thumbnail" src="{% static 'images/default-cover.png' %}" alt="Cover Photo">
 																					{% endif %}
 																				</div>
 																			</div>
@@ -72,11 +72,11 @@
 																<div class="text-holder">
 																	<label>Update Cover Photo</label>
 																	<div class="upload-gallery">
-																		{{profile_form.cover_photo}}
+																		{{profile_form.cover_picture}}
 																	</div>
-																	
+
 																</div>
-																<label class="text-danger">{{ profile_form.cover_photo.errors }}</label>
+																<label class="text-danger">{{ profile_form.cover_picture.errors }}</label>
 															</div>
 														</div>
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -97,7 +97,7 @@
 																	<div class="upload-gallery">
 																		{{vendor_form.vendor_license}}
 																	</div>
-																	
+
 																</div>
 																<label class="text-danger">{{ vendor_form.vendor_license.errors }}</label>
 															</div>
@@ -110,12 +110,12 @@
 														</div>
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 															<div class="field-holder">
-																<label>Address *</label>
+																<label>Address</label>
 																{{profile_form.address}}
 																<small class="text-muted float-right">powered by Google</small>
 															</div>
 														</div>
-                                                        
+
 
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 															<div class="field-holder">
@@ -140,8 +140,8 @@
 
                                                         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 															<div class="field-holder">
-																<label>Pin Code *</label>
-																{{profile_form.pin_code}}
+																<label>Postal Code *</label>
+																{{profile_form.postal_code}}
 															</div>
 														</div>
 
