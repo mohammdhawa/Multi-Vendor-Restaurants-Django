@@ -1,17 +1,26 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
+
+from menue.models import Category
 from .forms import VendorForm, UserProfileForm
 from accounts.models import Profile
 from .models import Vendor
+from menue.models import Category, FoodItem
 from accounts.views import check_role_vendor
+from menue.forms import CategoryForm
+
+
+def get_vendor(request):
+    vendor = Vendor.objects.get(user=request.user)
+    return vendor
 
 
 @login_required
 @user_passes_test(check_role_vendor)
 def vprofile(request):
     profile = get_object_or_404(Profile, user=request.user)
-    vendor = get_object_or_404(Vendor, user=request.user)
+    vendor = get_vendor(request)
 
     if request.method == 'POST':
         profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
@@ -35,3 +44,79 @@ def vprofile(request):
         'vendor': vendor
     }
     return render(request, 'vendor/vprofile.html', context)
+
+
+@login_required
+@user_passes_test(check_role_vendor)
+def menu_builder(request):
+    vendor = get_vendor(request)
+    categories = Category.objects.filter(vendor=vendor)
+
+    context = {
+        'categories': categories,
+        # 'vendor': vendor,
+    }
+
+    return render(request, 'vendor/menu_builder.html', context)
+
+
+@login_required
+@user_passes_test(check_role_vendor)
+def fooditems_by_category(request, pk=None):
+    vendor = get_vendor(request)
+    category = get_object_or_404(Category, pk=pk)
+    fooditems = FoodItem.objects.filter(category=category)
+
+    context = {
+        'fooditems': fooditems,
+        'category': category,
+        'vendor': vendor,
+    }
+
+    return render(request, 'vendor/fooditems_by_category.html', context)
+
+
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.vendor = get_vendor(request)
+            category.save()
+            messages.success(request, 'Category added successfully!')
+            return redirect('menu-builder')
+        else:
+            pass
+    else:
+        form = CategoryForm()
+
+    context = {
+        'form': form
+    }
+    return render(request, 'vendor/add_category.html', context)
+
+
+def edit_category(request, pk):
+    category = get_object_or_404(Category, pk=pk, vendor=get_vendor(request))
+
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Category updated successfully!')
+            return redirect('menu-builder')
+    else:
+        form = CategoryForm(instance=category)
+
+    context = {
+        'form': form,
+        'category': category
+    }
+    return render(request, 'vendor/edit_category.html', context)
+
+
+def delete_category(request, pk):
+    category = get_object_or_404(Category, pk=pk, vendor=get_vendor(request))
+    category.delete()
+    messages.success(request, 'Category deleted successfully!')
+    return redirect('menu-builder')
