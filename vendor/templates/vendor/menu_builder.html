@@ -24,7 +24,7 @@
                             <h6>Menu Categories</h6>
                             {% if categories %}
                             <br>
-                            <a href="" class="btn btn-success float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Food</a>
+                            <a href="{% url 'add-fooditem' %}" class="btn btn-success float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Food</a>
                             <a href="{% url 'add-category' %}" class="btn btn-info float-right m-1"><i class="fa fa-plus" aria-hidden="true"></i> Add Category</a>
                             <br><br>
                             <div class="table-responsive">

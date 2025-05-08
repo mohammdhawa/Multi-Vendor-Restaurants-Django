@@ -8,7 +8,7 @@ from accounts.models import Profile
 from .models import Vendor
 from menue.models import Category, FoodItem
 from accounts.views import check_role_vendor
-from menue.forms import CategoryForm
+from menue.forms import CategoryForm, FoodItemForm
 
 
 def get_vendor(request):
@@ -76,6 +76,8 @@ def fooditems_by_category(request, pk=None):
     return render(request, 'vendor/fooditems_by_category.html', context)
 
 
+@login_required
+@user_passes_test(check_role_vendor)
 def add_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -96,6 +98,8 @@ def add_category(request):
     return render(request, 'vendor/add_category.html', context)
 
 
+@login_required
+@user_passes_test(check_role_vendor)
 def edit_category(request, pk):
     category = get_object_or_404(Category, pk=pk, vendor=get_vendor(request))
 
@@ -115,8 +119,70 @@ def edit_category(request, pk):
     return render(request, 'vendor/edit_category.html', context)
 
 
+@login_required
+@user_passes_test(check_role_vendor)
 def delete_category(request, pk):
     category = get_object_or_404(Category, pk=pk, vendor=get_vendor(request))
     category.delete()
     messages.success(request, 'Category deleted successfully!')
     return redirect('menu-builder')
+
+
+@login_required
+@user_passes_test(check_role_vendor)
+def add_fooditem(request):
+    vendor = get_vendor(request)  # Make sure this returns the correct vendor instance
+
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES, vendor=vendor)
+        if form.is_valid():
+            fooditem = form.save(commit=False)
+            fooditem.vendor = vendor
+            fooditem.save()
+            messages.success(request, 'Food item added successfully!')
+            return redirect('fooditems_by_category', fooditem.category.id)
+        else:
+            print(form.errors)
+    else:
+        form = FoodItemForm(vendor=vendor)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'vendor/add_fooditem.html', context)
+
+
+@login_required
+@user_passes_test(check_role_vendor)
+def edit_fooditem(request, pk):
+    vendor = get_vendor(request)
+    fooditem = get_object_or_404(FoodItem, pk=pk, vendor=vendor)  # Ensure vendor owns the fooditem
+
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES, instance=fooditem, vendor=vendor)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Food item updated successfully!')
+            return redirect('fooditems_by_category', fooditem.category.id)
+        else:
+            print(form.errors)
+    else:
+        form = FoodItemForm(instance=fooditem, vendor=vendor)
+
+    context = {
+        'form': form,
+        'food': fooditem
+    }
+    return render(request, 'vendor/edit_fooditem.html', context)
+
+
+@login_required
+@user_passes_test(check_role_vendor)
+def delete_fooditem(request, pk):
+    vendor = get_vendor(request)
+    fooditem = get_object_or_404(FoodItem, pk=pk, vendor=vendor)  # Ensures ownership
+    category = fooditem.category
+
+    fooditem.delete()
+    messages.success(request, 'Food item deleted successfully!')
+    return redirect('fooditems_by_category', category.id)  # Or wherever you list the vendor's food items
