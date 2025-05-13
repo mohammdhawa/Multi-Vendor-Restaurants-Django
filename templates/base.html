@@ -57,8 +57,10 @@
     <!-- First load your custom JS -->
     <script src="{% static 'assets/js/custom.js' %}"></script>
 
+    {% if '/profile/' in request.GET %}
     <!-- Then load Google Maps API (it will call the callback function) -->
     <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script>
+    {% endif %}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -261,6 +263,10 @@
 			</div>
 		</div>
 	</div>
+       {% block script %}
+
+        {% endblock script %}
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 
 	<!-- Modal Popup End -->
