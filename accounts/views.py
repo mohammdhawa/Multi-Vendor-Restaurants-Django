@@ -169,11 +169,11 @@ def activate(request, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        messages.success(request, 'Your account has been activated successfully')
-        return redirect('my-account')
+        messages.success(request, 'Your account has been activated successfully. You can now login.')
+        return redirect('login')
     else:
         messages.error(request, 'Activation link is invalid!')
-        return redirect('my-account')
+        return redirect('login')
 
 
 def forgot_password(request):

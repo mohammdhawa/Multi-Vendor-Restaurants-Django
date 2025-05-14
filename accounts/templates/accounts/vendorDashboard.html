@@ -17,7 +17,7 @@
 
     		<!-- Main Section Start -->
 		<div class="main-section">
-			<div class="page-section restaurant-detail-image-section" style=" background: url({{ vendor.user.profile.cover_picture.url }}) no-repeat scroll 0 0 / cover;">
+			<div class="page-section restaurant-detail-image-section" style=" background: {% if vendor.user_profile.cover_picture %}url({{ vendor.user_profile.cover_picture.url }}) {% else %} url({% static 'assets/images/cover-photo01.jpg' %}) {% endif %}no-repeat scroll 0 0 / cover;">
 				<!-- Container Start -->
 				<div class="container">
 					<!-- Row Start -->
@@ -28,7 +28,11 @@
 								<div class="company-info">
 									<div class="img-holder">
 										<figure>
-											<img src="{{ vendor.user.profile.profile_picture.url }}" alt="">
+                                            {% if vendor.user_profile.profile_picture %}
+											    <img src="{{ vendor.user.profile.profile_picture.url }}" alt="">
+                                            {% else %}
+                                                <img src="{% static 'assets/extra-images/cover-photo17-359x212.jpg' %}" alt="">
+                                            {% endif %}
 										</figure>
 									</div>
 

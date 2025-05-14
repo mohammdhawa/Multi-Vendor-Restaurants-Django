@@ -258,3 +258,15 @@ def delete_cart(request, cart_id=None):
             'status': 'Failed',
             'message': f'Error: {str(e)}'
         })
+
+
+def search(request):
+    address = request.GET.get('address')
+    latitude = request.GET.get('lat')
+    longitude = request.GET.get('lng')
+    radius = request.GET.get('radius')
+
+    context = {
+
+    }
+    return render(request, 'marketplace/listings.html')

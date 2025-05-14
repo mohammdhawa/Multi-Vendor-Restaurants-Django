@@ -21,11 +21,11 @@
 				</div>
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
 					<div class="main-search fancy bg-holder">
-						<form action="" method="GET">
+						<form action="{% url 'search' %}" method="GET">
 							<div class="row">
 								<div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
 									<div class="field-holder">
-										<input type="text" name="keyword" placeholder="Resturant name or food name">
+										<input type="text" name="rest-name" placeholder="Resturant name or food name">
 									</div>
 								</div>
 								<div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
