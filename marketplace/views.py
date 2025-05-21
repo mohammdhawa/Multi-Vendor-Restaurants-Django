@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from vendor.models import Vendor
 from menue.models import Category, FoodItem
 from django.db.models import Prefetch
@@ -6,6 +6,9 @@ from django.http import HttpResponse, JsonResponse
 
 from .context_processors import get_cart_count
 from .models import Cart
+from django.db.models import Q
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.measure import D # D = Distance
 
 
 def marketplace(reqeust):
@@ -265,8 +268,51 @@ def search(request):
     latitude = request.GET.get('lat')
     longitude = request.GET.get('lng')
     radius = request.GET.get('radius')
+    keyword = request.GET.get('keyword')
+
+    # get vendors ids that has food item the user is looking for
+    fetch_vendors_by_fooditems = FoodItem.objects.filter(
+        food_title__icontains=keyword,
+        is_available=True
+    ).values_list('vendor', flat=True)
+
+    # Build the base query with keyword filtering
+    vendors = Vendor.objects.filter(
+        Q(id__in=fetch_vendors_by_fooditems) |
+        Q(vendor_name__icontains=keyword),
+        is_approved=True,
+        user__is_active=True
+    )
+
+    # Add location filter if coordinates and radius are provided
+    if latitude and longitude and radius:
+        try:
+            print('Before measureing distance')
+            print(vendors)
+            # Convert to float to ensure valid data
+            lat_float = float(latitude)
+            lng_float = float(longitude)
+            radius_float = float(radius)
+
+            # Create the point from coordinates
+            pnt = GEOSGeometry(f'POINT({lng_float} {lat_float})')
+
+            # Refine the existing query with the location filter
+            vendors = vendors.filter(
+                user_profile__location__distance_lte=(pnt, D(km=radius_float))
+            )
+
+            print(f"Location search with point {pnt} and radius {radius_float}km")
+            print(latitude, longitude)
+        except (ValueError, TypeError) as e:
+            # Log error if coordinates aren't valid
+            print(f"Error in location filtering: {e}")
+
+    vendor_count = vendors.count()
+    print(f"Found {vendor_count} vendors matching the criteria")
 
     context = {
-
+        'vendors': vendors,
+        'vendor_count': vendor_count,
     }
-    return render(request, 'marketplace/listings.html')
+    return render(request, 'marketplace/listings.html', context)

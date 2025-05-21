@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Packages
+    'django.contrib.gis',
 
     # Apps
     'accounts.apps.AccountsConfig',
@@ -91,7 +94,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Use PostgreSQL backend
+        # 'ENGINE': 'django.db.backends.postgresql',  # Use PostgreSQL backend
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'foodonline',  # Name of your PostgreSQL database
         'USER': 'bayan',  # PostgreSQL username
         'PASSWORD': '2925',  # PostgreSQL password
@@ -163,3 +167,7 @@ DEFAULT_FROM_EMAIL = 'foodOnline Marketplace <ismekbektop@gmail.com>'
 
 # Google API
 GOOGLE_API_KEY = 'AIzaSyAh_VZ-pGAkNcLAC6JKryCw3ZekuFzUoxo'
+
+# For Geo library
+GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
+GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
