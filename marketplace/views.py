@@ -300,7 +300,7 @@ def search(request):
                 pnt = GEOSGeometry(f'POINT({lng_float} {lat_float})')
 
                 # Refine the existing query with the location filter
-                vendors = vendors.filter(
+                vendors = Vendor.objects.filter(
                     Q(id__in=fetch_vendors_by_fooditems) |
                     Q(vendor_name__icontains=keyword),
                     is_approved=True,
