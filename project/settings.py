@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'vendor.apps.VendorConfig',
     'menue.apps.MenueConfig',
     'marketplace.apps.MarketplaceConfig',
-    'customers.apps.CustomersConfig'
+    'customers.apps.CustomersConfig',
+    'orders.apps.OrdersConfig'
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,8 @@ TEMPLATES = [
                 'accounts.context_processors.get_google_api',
                 'marketplace.context_processors.get_cart_count',
                 'accounts.context_processors.get_user_profile',
+                'accounts.context_processors.get_paypal_client_id',
+                'accounts.context_processors.get_stripe_publishable_key',
             ],
         },
     },
@@ -173,3 +176,14 @@ GOOGLE_API_KEY = 'AIzaSyAh_VZ-pGAkNcLAC6JKryCw3ZekuFzUoxo'
 # For Geo library
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
+
+# PayPal settings
+PAYPAL_CLIENT_ID = 'AWs6a7YzvNxQ9FrcdRBOUr-m5ELxqFCmtjwW10j8NR5UGzpakhN4wR99tzQjTYMn7NcJH0JB7EXPshz6'
+# PAYPAL_CLIENT_SECRET = 'EGRgeJpl6onxMgng5-NHrGhCztV4-pxGpuUGRUUwMkO1Oau_21gQ0LHVSBm9-r77eRNeNbyi_QZS_y46'
+# PAYPAL_MODE = 'sandbox'
+# PAYPAL_RETURN_URL = 'http://127.0.0.1:8000/success/'
+# PAYPAL_CANCEL_URL = 'http://127.0.0.1:8000/cancel/'
+
+# SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+# Stripe settings
