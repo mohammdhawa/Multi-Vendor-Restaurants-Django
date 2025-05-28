@@ -136,7 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
@@ -187,5 +187,3 @@ PAYPAL_CLIENT_ID = 'AWs6a7YzvNxQ9FrcdRBOUr-m5ELxqFCmtjwW10j8NR5UGzpakhN4wR99tzQj
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # Stripe settings
-STRIPE_PUBLISHABLE_KEY = ''
-STRIPE_SECRET_KEY = ''

@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+{% include 'includes/alerts.html' %}
+
+<!-- Main Section Start -->
+<div class="main-section">
+
+    {% include 'includes/cover.html' %}
+    <div class="page-section account-header buyer-logged-in">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                    <!-- Load the sidebar here -->
+                    {% include 'includes/v_sidebar.html' %}
+
+                    <!-- Status Update Sidebar -->
+                    <div class="user-info white-bg">
+                        <div class="dz-scroll">
+                            <h6 class="text-uppercase">Change Order Status</h6>
+                            <div id="status-change-form" style="display: none;">
+                                <form id="statusUpdateForm">
+                                    <div class="form-group">
+                                        <label for="selected-order">Selected Order:</label>
+                                        <input type="text" id="selected-order" class="form-control" readonly>
+                                        <input type="hidden" id="selected-order-number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status-select">New Status:</label>
+                                        <select id="status-select" class="form-control" required>
+                                            <option value="">Select Status</option>
+                                            {% for status_code, status_display in status_choices %}
+                                                <option value="{{ status_code }}">{{ status_display }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary btn-block">Update Status</button>
+                                        <button type="button" id="cancel-status-change" class="btn btn-secondary btn-block">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="status-change-instruction">
+                                <p class="text-muted">Click on any order row to change its status.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+
+                            <h5 class="text-uppercase">My Orders</h5>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="user-orders-list">
+                                        <div class="responsive-table">
+                                            <table class="table table-hover" id="myOrdersTable">
+                                                <thead>
+                                                  <tr>
+                                                    <th scope="col">Order #</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Total</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Action</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for order in orders %}
+                                                  <tr class="order-row" data-order-number="{{ order.order_number }}" data-current-status="{{ order.status }}" style="cursor: pointer;">
+                                                    <td><b><a href="{% url 'vendor_order_detail' order.order_number %}" class="text-dark">{{ order.order_number }}</a></b></td>
+                                                    <td>{{ order.name }}</td>
+                                                    <td>${{ order.get_total_by_vendor.grand_total }}</td>
+                                                    <td>
+                                                        <span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span>
+                                                    </td>
+                                                    <td>{{ order.created_at }}</td>
+                                                    <td>
+                                                        <a href="{% url 'vendor_order_detail' order.order_number %}" class="btn btn-info btn-sm">Details</a>
+                                                        <button class="btn btn-warning btn-sm change-status-btn" data-order-number="{{ order.order_number }}" data-current-status="{{ order.status }}">
+                                                            Change Status
+                                                        </button>
+                                                    </td>
+                                                  </tr>
+                                                  {% endfor %}
+                                                </tbody>
+                                              </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main Section End -->
+
+<!-- Add custom styles -->
+<style>
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-new {
+    background-color: #007bff;
+    color: white;
+}
+
+.status-accepted {
+    background-color: #ffc107;
+    color: black;
+}
+
+.status-completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.status-cancelled {
+    background-color: #dc3545;
+    color: white;
+}
+
+.order-row:hover {
+    background-color: #f8f9fa;
+}
+
+.selected-order {
+    background-color: #e3f2fd !important;
+}
+
+#status-change-form {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+</style>
+
+<!-- Add JavaScript for status change functionality -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusChangeForm = document.getElementById('status-change-form');
+    const statusChangeInstruction = document.getElementById('status-change-instruction');
+    const selectedOrderInput = document.getElementById('selected-order');
+    const selectedOrderNumberInput = document.getElementById('selected-order-number');
+    const statusSelect = document.getElementById('status-select');
+    const statusUpdateForm = document.getElementById('statusUpdateForm');
+    const cancelButton = document.getElementById('cancel-status-change');
+    const changeStatusButtons = document.querySelectorAll('.change-status-btn');
+    const orderRows = document.querySelectorAll('.order-row');
+
+    // Handle change status button clicks
+    changeStatusButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const orderNumber = this.dataset.orderNumber;
+            const currentStatus = this.dataset.currentStatus;
+            selectOrder(orderNumber, currentStatus);
+        });
+    });
+
+    // Handle order row clicks
+    orderRows.forEach(row => {
+        row.addEventListener('click', function(e) {
+            // Don't trigger if clicking on links or buttons
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                return;
+            }
+
+            const orderNumber = this.dataset.orderNumber;
+            const currentStatus = this.dataset.currentStatus;
+            selectOrder(orderNumber, currentStatus);
+        });
+    });
+
+    function selectOrder(orderNumber, currentStatus) {
+        // Remove previous selection
+        orderRows.forEach(row => row.classList.remove('selected-order'));
+
+        // Highlight selected row
+        const selectedRow = document.querySelector(`[data-order-number="${orderNumber}"]`);
+        if (selectedRow) {
+            selectedRow.classList.add('selected-order');
+        }
+
+        // Show form and hide instruction
+        statusChangeForm.style.display = 'block';
+        statusChangeInstruction.style.display = 'none';
+
+        // Populate form
+        selectedOrderInput.value = orderNumber;
+        selectedOrderNumberInput.value = orderNumber;
+        statusSelect.value = '';
+
+        // Scroll to status change section on mobile
+        const statusSection = document.querySelector('.user-info');
+        if (window.innerWidth <= 768) {
+            statusSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // Handle cancel button
+    cancelButton.addEventListener('click', function() {
+        resetForm();
+    });
+
+    function resetForm() {
+        statusChangeForm.style.display = 'none';
+        statusChangeInstruction.style.display = 'block';
+        orderRows.forEach(row => row.classList.remove('selected-order'));
+        statusUpdateForm.reset();
+    }
+
+    // Handle form submission
+    statusUpdateForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const orderNumber = selectedOrderNumberInput.value;
+        const newStatus = statusSelect.value;
+
+        if (!orderNumber || !newStatus) {
+            alert('Please select an order and status');
+            return;
+        }
+
+        // Show loading state
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Updating...';
+        submitButton.disabled = true;
+
+        // Send AJAX request
+        fetch("{% url 'update_order_status' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                order_number: orderNumber,
+                status: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update the status in the table
+                const orderRow = document.querySelector(`[data-order-number="${orderNumber}"]`);
+                if (orderRow) {
+                    const statusCell = orderRow.querySelector('.status-badge');
+                    if (statusCell) {
+                        statusCell.textContent = data.new_status;
+                        statusCell.className = `status-badge status-${data.new_status.toLowerCase()}`;
+                    }
+                    // Update data attributes
+                    orderRow.dataset.currentStatus = data.new_status;
+                    const changeBtn = orderRow.querySelector('.change-status-btn');
+                    if (changeBtn) {
+                        changeBtn.dataset.currentStatus = data.new_status;
+                    }
+                }
+
+                alert(data.message);
+                resetForm();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the status');
+        })
+        .finally(() => {
+            // Reset button state
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        });
+    });
+});
+</script>
+
+{% endblock %}

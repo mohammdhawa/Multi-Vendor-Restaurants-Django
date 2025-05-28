@@ -53,6 +53,29 @@ class Order(models.Model):
     def __str__(self):
         return self.order_number
 
+    def get_total_by_vendor(self, vendor_id):
+        """Calculate totals for a specific vendor"""
+        vendor_items = self.order_food.filter(fooditem__vendor_id=vendor_id)
+
+        if not vendor_items.exists():
+            return {
+                'subtotal': 0,
+                'tax': 0,
+                'grand_total': 0
+            }
+
+        subtotal = sum(item.amount for item in vendor_items)
+
+        # Calculate tax proportionally (assuming 10% tax rate, adjust as needed)
+        tax_rate = 0.10
+        vendor_tax = subtotal * tax_rate
+
+        return {
+            'subtotal': round(subtotal, 2),
+            'tax': round(vendor_tax, 2),
+            'grand_total': round(subtotal + vendor_tax, 2)
+        }
+
 
 class OrderFood(models.Model):
     order = models.ForeignKey(Order, related_name='order_food', on_delete=models.CASCADE)

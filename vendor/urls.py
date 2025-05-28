@@ -20,4 +20,9 @@ urlpatterns = [
     path('menu-builder/fooditem/add', views.add_fooditem, name='add-fooditem'),
     path('menu-builder/fooditem/edit/<int:pk>/', views.edit_fooditem, name='edit-fooditem'),
     path('menu-builder/fooditem/delete/<int:pk>/', views.delete_fooditem, name='delete-fooditem'),
+
+    path('vendor-orders/', views.vendor_orders, name='vendor_orders'),
+    path('order-detail/<str:order_number>/', views.vendor_order_detail, name='vendor_order_detail'),
+    path('orders/update-status/', views.update_order_status, name='update_order_status'),
+    path('earnings/', views.vendor_earnings, name='vendor_earnings'),
 ]

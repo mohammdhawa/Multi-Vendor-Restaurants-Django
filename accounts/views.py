@@ -1,8 +1,10 @@
+from django.utils import timezone
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
@@ -14,7 +16,8 @@ from vendor.forms import VendorForm
 from .forms import UserForm
 from .models import User
 from vendor.models import Vendor
-from orders.models import Order
+from orders.models import Order, OrderFood
+from django.db.models import Sum
 
 
 # Restrict the vendor from accessing the customer dashboard
@@ -155,8 +158,69 @@ def customer_dashboard(request):
 @login_required
 @user_passes_test(check_role_vendor)
 def vendor_dashboard(request):
+    """Display vendor dashboard with overview statistics and recent orders"""
+    try:
+        vendor = Vendor.objects.get(user=request.user)
+    except Vendor.DoesNotExist:
+        messages.error(request, "You don't have a vendor account.")
+        return redirect('dashboard')
 
-    return render(request, 'accounts/vendorDashboard.html')
+    # Get all orders that contain food items from this vendor
+    vendor_orders = Order.objects.filter(
+        order_food__fooditem__vendor=vendor,
+        is_ordered=True
+    ).distinct()
+
+    # Calculate total orders count
+    total_orders = vendor_orders.count()
+
+    # Calculate total revenue for this vendor across all orders
+    total_revenue = 0
+    for order in vendor_orders:
+        vendor_total = order.get_total_by_vendor(vendor.id)
+        total_revenue += vendor_total['grand_total']
+
+    # Calculate this month's revenue
+    now = timezone.now()
+    current_month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    current_month_orders = vendor_orders.filter(created_at__gte=current_month_start)
+
+    current_month_revenue = 0
+    for order in current_month_orders:
+        vendor_total = order.get_total_by_vendor(vendor.id)
+        current_month_revenue += vendor_total['grand_total']
+
+    # Get recent orders (last 10 orders)
+    recent_orders = vendor_orders.order_by('-created_at')[:10]
+
+    # Add vendor totals to each recent order
+    for order in recent_orders:
+        vendor_total = order.get_total_by_vendor(vendor.id)
+        order.vendor_total = vendor_total['grand_total']
+        order.vendor_subtotal = vendor_total['subtotal']
+        order.vendor_tax = vendor_total['tax']
+
+        # Calculate charges (assuming it's tax + any service fees)
+        order.vendor_charges = vendor_total['tax']
+
+        # Calculate received amount (total - charges)
+        order.vendor_received = vendor_total['grand_total'] - vendor_total['tax']
+
+    # Filter orders by status if requested
+    status_filter = request.GET.get('status')
+    if status_filter:
+        recent_orders = recent_orders.filter(status=status_filter)
+
+    context = {
+        'vendor': vendor,
+        'total_orders': total_orders,
+        'total_revenue': total_revenue,
+        'current_month_revenue': current_month_revenue,
+        'recent_orders': recent_orders,
+        'status_choices': Order.STATUS,  # Assuming you have status choices in your Order model
+    }
+
+    return render(request, 'accounts/vendorDashboard.html', context)
 
 
 @login_required

@@ -15,53 +15,53 @@
 
 <!-- Main Section Start -->
 
-    		<!-- Main Section Start -->
-		<div class="main-section">
-			<div class="page-section restaurant-detail-image-section" style=" background: {% if vendor.user_profile.cover_picture %}url({{ vendor.user_profile.cover_picture.url }}) {% else %} url({% static 'assets/images/cover-photo01.jpg' %}) {% endif %}no-repeat scroll 0 0 / cover;">
-				<!-- Container Start -->
-				<div class="container">
-					<!-- Row Start -->
-					<div class="row">
-						<!-- Column Start -->
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<div class="company-info-detail">
-								<div class="company-info">
-									<div class="img-holder">
-										<figure>
+            <!-- Main Section Start -->
+        <div class="main-section">
+            <div class="page-section restaurant-detail-image-section" style=" background: {% if vendor.user_profile.cover_picture %}url({{ vendor.user_profile.cover_picture.url }}) {% else %} url({% static 'assets/images/cover-photo01.jpg' %}) {% endif %}no-repeat scroll 0 0 / cover;">
+                <!-- Container Start -->
+                <div class="container">
+                    <!-- Row Start -->
+                    <div class="row">
+                        <!-- Column Start -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="company-info-detail">
+                                <div class="company-info">
+                                    <div class="img-holder">
+                                        <figure>
                                             {% if vendor.user_profile.profile_picture %}
-											    <img src="{{ vendor.user.profile.profile_picture.url }}" alt="">
+                                                <img src="{{ vendor.user.profile.profile_picture.url }}" alt="">
                                             {% else %}
                                                 <img src="{% static 'assets/extra-images/cover-photo17-359x212.jpg' %}" alt="">
                                             {% endif %}
-										</figure>
-									</div>
+                                        </figure>
+                                    </div>
 
-									<div class="text-holder">
-										<span class="restaurant-title">{{ vendor.vendor_name }}</span>
-										<div class="text">
-											<i class="icon-location"></i>
-											<p>{{ vendor.user.profile.address_line1}} <br> {{ vendor.user.profile.address_line2 }}</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- Column End -->
-					</div>
-					<!-- Row End -->
-				</div>
-				<!-- Container End -->
-			</div>
-			<div class="page-section account-header buyer-logged-in">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-							<!-- Load the sidebar here -->
+                                    <div class="text-holder">
+                                        <span class="restaurant-title">{{ vendor.vendor_name }}</span>
+                                        <div class="text">
+                                            <i class="icon-location"></i>
+                                            <p>{{ vendor.user.profile.address_line1}} <br> {{ vendor.user.profile.address_line2 }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Column End -->
+                    </div>
+                    <!-- Row End -->
+                </div>
+                <!-- Container End -->
+            </div>
+            <div class="page-section account-header buyer-logged-in">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <!-- Load the sidebar here -->
                             {% include 'includes/v_sidebar.html' %}
-						</div>
-						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-							<div class="user-dashboard loader-holder">
-								<div class="user-holder">
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                            <div class="user-dashboard loader-holder">
+                                <div class="user-holder">
                                     <h5 class="text-uppercase">Overview</h5>
                                     <div class="row h3 text-center">
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -70,7 +70,7 @@
                                                     Total Orders
                                                 </div>
                                                 <div class="card-body text-center">
-                                                    <a href="#" style="color: black; text-decoration: none;"><h3 class="card-title">$165.0</h3></a>
+                                                    <a href="{% url 'vendor_orders' %}" style="color: black; text-decoration: none;"><h3 class="card-title">{{ total_orders }}</h3></a>
                                                 </div>
                                             </div>
 
@@ -81,7 +81,7 @@
                                                     Total Revenue
                                                 </div>
                                                 <div class="card-body text-center">
-                                                    <a href="#" style="color: black; text-decoration: none;"><h3 class="card-title">$165.0</h3></a>
+                                                    <a href="{% url 'vendor_orders' %}" style="color: black; text-decoration: none;"><h3 class="card-title">${{ total_revenue|floatformat:2 }}</h3></a>
                                                 </div>
                                             </div>
 
@@ -92,7 +92,7 @@
                                                     This Month
                                                 </div>
                                                 <div class="card-body text-center">
-                                                    <a href="#" style="color: black; text-decoration: none;"><h3 class="card-title">$165.0</h3></a>
+                                                    <a href="{% url 'vendor_orders' %}" style="color: black; text-decoration: none;"><h3 class="card-title">${{ current_month_revenue|floatformat:2 }}</h3></a>
                                                 </div>
                                             </div>
 
@@ -101,80 +101,68 @@
                                     <br>
                                     <br>
 
-									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-										<div class="row">
-											<div class="element-title has-border right-filters-row">
-												<h5>Recent Orders</h5>
-												<div class="right-filters row pull-right">
-													<div class="col-lg-6 col-md-6 col-xs-6">
-														<div class="input-field">
-															<select class="chosen-select-no-single">
-																<option selected="selected" value="">Select Orders Status</option>
-																<option value="Processing">Processing</option>
-																<option value="Cancelled">Cancelled</option>
-																<option value="Completed">Completed</option>
-															</select>
-														</div>
-													</div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="element-title has-border right-filters-row">
+                                                <h5>Recent Orders</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="user-orders-list">
+                                                <div class="responsive-table">
+                                                    <ul class="table-generic">
+                                                        <li class="order-heading-titles">
+                                                            <div>Order id</div>
+                                                            <div>Date</div>
+                                                            <div>Total Price</div>
+                                                            <div>Charges</div>
+                                                            <div>Received</div>
+                                                            <div>Status</div>
+                                                        </li>
+                                                        {% for order in recent_orders %}
+                                                        <li class="order-heading-titles">
+                                                            <div><a href="{% url 'vendor_order_detail' order.order_number %}">{{ order.order_number }}</a></div>
+                                                            <div>{{ order.created_at|date:"M d, Y" }}</div>
+                                                            <div>${{ order.vendor_total|floatformat:2 }}</div>
+                                                            <div>${{ order.vendor_charges|floatformat:2 }}</div>
+                                                            <div>${{ order.vendor_received|floatformat:2 }}</div>
+                                                            <div>
+                                                                {% if order.status == 'New' %}
+                                                                    <span class="order-status" style="background-color: #007cff;">{{ order.get_status_display }}</span>
+                                                                {% elif order.status == 'Accepted' %}
+                                                                    <span class="order-status" style="background-color: #28a745;">{{ order.get_status_display }}</span>
+                                                                {% elif order.status == 'Completed' %}
+                                                                    <span class="order-status" style="background-color: #047a06;">{{ order.get_status_display }}</span>
+                                                                {% elif order.status == 'Cancelled' %}
+                                                                    <span class="order-status" style="background-color: #dc3545;">{{ order.get_status_display }}</span>
+                                                                {% else %}
+                                                                    <span class="order-status" style="background-color: #1e73be;">{{ order.get_status_display }}</span>
+                                                                {% endif %}
+                                                            </div>
+                                                        </li>
+                                                        {% empty %}
+                                                        <li class="order-heading-titles">
+                                                            <div colspan="6" style="text-align: center; padding: 20px;">
+                                                                <p>No orders found.</p>
+                                                            </div>
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
 
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-											<div class="user-orders-list">
-												<div class="responsive-table">
-													<ul class="table-generic">
-														<li class="order-heading-titles">
-															<div>Order id</div>
-															<div>Date</div>
-															<div>Total Price</div>
-															<div>Charges</div>
-															<div>Received</div>
-															<div>Status</div>
-														</li>
-														<li class="order-heading-titles">
-															<div><a href="#" data-toggle="modal" data-target="#order-det-22606">order-22606</a></div>
-															<div>Apr 9,2020</div>
-															<div>£ 38.99</div>
-															<div>£ 3.90</div>
-															<div>£ 35.09</div>
-															<div><span class="order-status" style="background-color: #047a06;">Completed</span></div>
-														</li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-
-
-														<li class="order-heading-titles">
-															<div><a href="#" data-toggle="modal" data-target="#order-det-22606">order-22583</a></div>
-															<div>Apr 9,2020</div>
-															<div>£ 26.22</div>
-															<div>£ 2.62</div>
-															<div>£ 23.60</div>
-															<div><span class="order-status" style="background-color: #1e73be;">Processing</span></div>
-														</li>
-														<li class="order-heading-titles">
-															<div><a href="#" data-toggle="modal" data-target="#order-det-22606">order-22493</a></div>
-															<div>Apr 2,2020</div>
-															<div>£ 28.24</div>
-															<div>£ 2.82</div>
-															<div>£ 25.42</div>
-															<div><span class="order-status" style="background-color: #047a06;">Completed</span></div>
-														</li>
-													</ul>
-
-												</div>
-											</div>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- Main Section End -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Section End -->
 
 {% endblock body %}
