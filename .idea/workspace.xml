@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="176ffef7-048f-45ff-9987-74cc8581cce3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/orders/templates/orders/my_orders.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/orders/templates/orders/order_detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/context_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/context_processors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketplace/templates/marketplace/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/marketplace/templates/marketplace/cart.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/marketplace/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/marketplace/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/templates/accounts/customerDashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/templates/accounts/customerDashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/customers/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/customers/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/project/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/includes/c_sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/includes/c_sidebar.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,6 +158,7 @@
       <workItem from="1748041412241" duration="2009000" />
       <workItem from="1748083621749" duration="20249000" />
       <workItem from="1748169170314" duration="3989000" />
+      <workItem from="1748433232739" duration="5700000" />
     </task>
     <servers />
   </component>

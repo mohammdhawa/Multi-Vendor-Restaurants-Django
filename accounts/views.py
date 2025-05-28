@@ -14,6 +14,7 @@ from vendor.forms import VendorForm
 from .forms import UserForm
 from .models import User
 from vendor.models import Vendor
+from orders.models import Order
 
 
 # Restrict the vendor from accessing the customer dashboard
@@ -139,8 +140,16 @@ def logout(request):
 @login_required
 @user_passes_test(check_role_customer)
 def customer_dashboard(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    orders_count = orders.count()
+    recent_orders = orders.order_by('-created_at')[:3]
 
-    return render(request, 'accounts/customerDashboard.html', {})
+    context = {
+        'orders_count': orders_count,
+        'recent_orders': recent_orders,
+    }
+
+    return render(request, 'accounts/customerDashboard.html', context)
 
 
 @login_required

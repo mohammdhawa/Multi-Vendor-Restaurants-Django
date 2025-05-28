@@ -4,6 +4,7 @@ from vendor.forms import UserProfileForm
 from accounts.forms import UserInfoForm
 from accounts.models import Profile
 from django.contrib import messages
+from orders.models import Order, OrderFood
 
 
 @login_required(login_url='login')
@@ -28,3 +29,27 @@ def cprofile(request):
         'profile': profile
     }
     return render(request, 'customers/cprofile.html', context)
+
+
+@login_required(login_url='login')
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+
+    context = {
+        'orders': orders
+    }
+
+    return render(request, 'orders/my_orders.html', context)
+
+
+@login_required(login_url='login')
+def order_detail(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user=request.user, is_ordered=True)
+    ordered_food = OrderFood.objects.filter(order=order)
+
+    context = {
+        'order': order,
+        'ordered_food': ordered_food
+    }
+
+    return render(request, 'orders/order_detail.html', context)

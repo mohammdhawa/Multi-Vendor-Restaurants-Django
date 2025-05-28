@@ -184,6 +184,8 @@ PAYPAL_CLIENT_ID = 'AWs6a7YzvNxQ9FrcdRBOUr-m5ELxqFCmtjwW10j8NR5UGzpakhN4wR99tzQj
 # PAYPAL_RETURN_URL = 'http://127.0.0.1:8000/success/'
 # PAYPAL_CANCEL_URL = 'http://127.0.0.1:8000/cancel/'
 
-# SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # Stripe settings
+STRIPE_PUBLISHABLE_KEY = ''
+STRIPE_SECRET_KEY = ''
