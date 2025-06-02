@@ -1,0 +1,237 @@
+
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <!-- Chatbot Icon (Minimized State) -->
+        <div class="chatbot-icon" id="chatbotIcon">
+            <div class="notification-badge" id="notificationBadge">1</div>
+        </div>
+
+        <!-- Chatbot Window (Expanded State) -->
+        <div class="chatbot-window" id="chatbotWindow">
+            <!-- Header -->
+            <div class="chatbot-header">
+                <div class="chatbot-title">
+                    <div class="status-dot"></div>
+                    Chat Assistant
+                </div>
+                <button class="minimize-btn" id="minimizeBtn">−</button>
+            </div>
+
+            <!-- Messages Container -->
+            <div class="messages-container" id="messagesContainer">
+                <div class="message bot">
+                    <div class="message-avatar">AI</div>
+                    <div class="message-bubble">
+                        Hello! I'm here to help you. How can I assist you today?
+                    </div>
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="message-avatar">AI</div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Container -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea
+                        class="message-input"
+                        id="messageInput"
+                        placeholder="Type your message..."
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Chatbot {
+            constructor() {
+                this.isExpanded = false;
+                this.isTyping = false;
+                this.messageHistory = [];
+
+                this.initializeElements();
+                this.attachEventListeners();
+                this.showNotification();
+            }
+
+            initializeElements() {
+                this.container = document.getElementById('chatbotContainer');
+                this.icon = document.getElementById('chatbotIcon');
+                this.window = document.getElementById('chatbotWindow');
+                this.minimizeBtn = document.getElementById('minimizeBtn');
+                this.messagesContainer = document.getElementById('messagesContainer');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendBtn = document.getElementById('sendBtn');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.notificationBadge = document.getElementById('notificationBadge');
+            }
+
+            attachEventListeners() {
+                // Toggle chatbot
+                this.icon.addEventListener('click', () => this.expandChatbot());
+                this.minimizeBtn.addEventListener('click', () => this.minimizeChatbot());
+
+                // Send message
+                this.sendBtn.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', () => this.autoResizeTextarea());
+
+                // Hide notification when expanded
+                this.window.addEventListener('transitionend', () => {
+                    if (this.isExpanded) {
+                        this.hideNotification();
+                    }
+                });
+            }
+
+            expandChatbot() {
+                this.isExpanded = true;
+                this.icon.style.display = 'none';
+                this.window.classList.add('show');
+                this.messageInput.focus();
+                this.scrollToBottom();
+            }
+
+            minimizeChatbot() {
+                this.isExpanded = false;
+                this.window.classList.remove('show');
+                setTimeout(() => {
+                    this.icon.style.display = 'flex';
+                }, 300);
+            }
+
+            showNotification() {
+                this.notificationBadge.classList.add('show');
+            }
+
+            hideNotification() {
+                this.notificationBadge.classList.remove('show');
+            }
+
+            autoResizeTextarea() {
+                this.messageInput.style.height = 'auto';
+                this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 80) + 'px';
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || this.isTyping) return;
+
+                // Add user message
+                this.addMessage(message, 'user');
+                this.messageInput.value = '';
+                this.autoResizeTextarea();
+
+                // Show typing indicator
+                this.showTyping();
+
+                // Simulate API call delay
+                setTimeout(() => {
+                    this.hideTyping();
+                    this.generateBotResponse(message);
+                }, 1000 + Math.random() * 2000);
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar';
+                avatar.textContent = sender === 'user' ? 'U' : 'AI';
+
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble';
+                bubble.textContent = text;
+
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(bubble);
+
+                this.messagesContainer.insertBefore(messageDiv, this.typingIndicator);
+                this.messageHistory.push({ text, sender, timestamp: Date.now() });
+
+                this.scrollToBottom();
+            }
+
+            generateBotResponse(userMessage) {
+                // Simple response generator - replace with your actual chatbot logic
+                const responses = [
+                    "That's an interesting question! Let me help you with that.",
+                    "I understand what you're asking. Here's what I think...",
+                    "Thanks for your message! I'm here to assist you.",
+                    "Let me provide you with some information about that.",
+                    "That's a great point. Here's my response...",
+                    "I appreciate you reaching out. How else can I help?",
+                ];
+
+                const contextualResponses = {
+                    'hello': "Hello! It's great to meet you. How can I help you today?",
+                    'hi': "Hi there! What can I do for you?",
+                    'help': "I'm here to help! You can ask me questions about our services, get support, or just have a conversation.",
+                    'bye': "Goodbye! Feel free to come back anytime if you need assistance.",
+                    'thanks': "You're very welcome! Is there anything else I can help you with?",
+                };
+
+                const lowerMessage = userMessage.toLowerCase();
+                let response = contextualResponses[lowerMessage] ||
+                             responses[Math.floor(Math.random() * responses.length)];
+
+                // Add some personality based on message content
+                if (lowerMessage.includes('problem') || lowerMessage.includes('issue')) {
+                    response = "I'm sorry to hear you're having trouble. Let me help you resolve this issue.";
+                } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                    response = "I'd be happy to help you with pricing information. Let me get those details for you.";
+                }
+
+                this.addMessage(response, 'bot');
+            }
+
+            showTyping() {
+                this.isTyping = true;
+                this.typingIndicator.style.display = 'flex';
+                this.sendBtn.disabled = true;
+                this.scrollToBottom();
+            }
+
+            hideTyping() {
+                this.isTyping = false;
+                this.typingIndicator.style.display = 'none';
+                this.sendBtn.disabled = false;
+            }
+
+            scrollToBottom() {
+                requestAnimationFrame(() => {
+                    const container = this.messagesContainer;
+                    container.scrollTop = container.scrollHeight;
+
+                    // Fallback for stubborn cases
+                    setTimeout(() => {
+                        container.scrollTop = container.scrollHeight;
+                    }, 50);
+                });
+            }
+        }
+
+        // Initialize chatbot when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new Chatbot();
+        });
+    </script>

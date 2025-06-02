@@ -10,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode
 
+from menue.models import FoodItem
 from .utils import detect_user, send_verification_email, send_reset_password_email
 
 from vendor.forms import VendorForm
@@ -305,3 +306,4 @@ def reset_password(request):
             return redirect('reset-password')
 
     return render(request, 'accounts/reset_password.html')
+

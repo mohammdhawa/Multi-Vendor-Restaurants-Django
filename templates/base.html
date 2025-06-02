@@ -64,6 +64,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link href="{% static 'assets/css/chatbot_style.css' %}" rel="stylesheet">
+
 
 
     {% block css %}
@@ -83,6 +85,10 @@
         {% block body %}
 
         {% endblock body %}
+
+        {% if user.is_authenticated %}
+            {% include 'includes/chatbot.html' %}
+        {% endif %}
 
 		<!-- Footer Start -->
 		{% include 'includes/footer.html' %}
