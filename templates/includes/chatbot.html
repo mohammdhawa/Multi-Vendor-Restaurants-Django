@@ -1,6 +1,4 @@
-
-
-    <!-- Chatbot Container -->
+ <!-- Chatbot Container -->
     <div class="chatbot-container" id="chatbotContainer">
         <!-- Chatbot Icon (Minimized State) -->
         <div class="chatbot-icon" id="chatbotIcon">
@@ -13,7 +11,7 @@
             <div class="chatbot-header">
                 <div class="chatbot-title">
                     <div class="status-dot"></div>
-                    Chat Assistant
+                    Food Recommendation Assistant
                 </div>
                 <button class="minimize-btn" id="minimizeBtn">−</button>
             </div>
@@ -23,7 +21,7 @@
                 <div class="message bot">
                     <div class="message-avatar">AI</div>
                     <div class="message-bubble">
-                        Hello! I'm here to help you. How can I assist you today?
+                        Hello! I'm your food recommendation assistant. I can help you find dishes based on your dietary preferences. What type of cuisine or diet are you following?
                     </div>
                 </div>
 
@@ -44,7 +42,7 @@
                     <textarea
                         class="message-input"
                         id="messageInput"
-                        placeholder="Type your message..."
+                        placeholder="Ask me about food recommendations..."
                         rows="1"
                     ></textarea>
                     <button class="send-btn" id="sendBtn"></button>
@@ -54,11 +52,13 @@
     </div>
 
     <script>
-        class Chatbot {
+        class FoodChatbot {
             constructor() {
                 this.isExpanded = false;
                 this.isTyping = false;
                 this.messageHistory = [];
+                this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                this.apiUrl = '/api/chatbot/';
 
                 this.initializeElements();
                 this.attachEventListeners();
@@ -143,11 +143,35 @@
                 // Show typing indicator
                 this.showTyping();
 
-                // Simulate API call delay
-                setTimeout(() => {
+                try {
+                    // Make API call to Django backend
+                    const response = await fetch(this.apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': this.csrfToken,
+                        },
+                        body: JSON.stringify({
+                            message: message
+                        })
+                    });
+
+                    const data = await response.json();
+
                     this.hideTyping();
-                    this.generateBotResponse(message);
-                }, 1000 + Math.random() * 2000);
+
+                    if (response.ok && data.status === 'success') {
+                        this.addMessage(data.response, 'bot');
+                    } else {
+                        this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                        console.error('API Error:', data.error);
+                    }
+
+                } catch (error) {
+                    this.hideTyping();
+                    this.addMessage('Sorry, I\'m having trouble connecting. Please check your internet connection and try again.', 'bot');
+                    console.error('Network Error:', error);
+                }
             }
 
             addMessage(text, sender) {
@@ -160,7 +184,9 @@
 
                 const bubble = document.createElement('div');
                 bubble.className = 'message-bubble';
-                bubble.textContent = text;
+
+                // Format message with line breaks
+                bubble.innerHTML = text.replace(/\n/g, '<br>');
 
                 messageDiv.appendChild(avatar);
                 messageDiv.appendChild(bubble);
@@ -169,39 +195,6 @@
                 this.messageHistory.push({ text, sender, timestamp: Date.now() });
 
                 this.scrollToBottom();
-            }
-
-            generateBotResponse(userMessage) {
-                // Simple response generator - replace with your actual chatbot logic
-                const responses = [
-                    "That's an interesting question! Let me help you with that.",
-                    "I understand what you're asking. Here's what I think...",
-                    "Thanks for your message! I'm here to assist you.",
-                    "Let me provide you with some information about that.",
-                    "That's a great point. Here's my response...",
-                    "I appreciate you reaching out. How else can I help?",
-                ];
-
-                const contextualResponses = {
-                    'hello': "Hello! It's great to meet you. How can I help you today?",
-                    'hi': "Hi there! What can I do for you?",
-                    'help': "I'm here to help! You can ask me questions about our services, get support, or just have a conversation.",
-                    'bye': "Goodbye! Feel free to come back anytime if you need assistance.",
-                    'thanks': "You're very welcome! Is there anything else I can help you with?",
-                };
-
-                const lowerMessage = userMessage.toLowerCase();
-                let response = contextualResponses[lowerMessage] ||
-                             responses[Math.floor(Math.random() * responses.length)];
-
-                // Add some personality based on message content
-                if (lowerMessage.includes('problem') || lowerMessage.includes('issue')) {
-                    response = "I'm sorry to hear you're having trouble. Let me help you resolve this issue.";
-                } else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
-                    response = "I'd be happy to help you with pricing information. Let me get those details for you.";
-                }
-
-                this.addMessage(response, 'bot');
             }
 
             showTyping() {
@@ -232,6 +225,14 @@
 
         // Initialize chatbot when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            new Chatbot();
+            new FoodChatbot();
         });
+    </script>
+
+    <!-- Pass Django context to JavaScript if needed -->
+    <script>
+        window.djangoContext = {
+            userAuthenticated: {{ user_authenticated|yesno:"true,false" }},
+            foodContext: {{ food_context|safe }}
+        };
     </script>

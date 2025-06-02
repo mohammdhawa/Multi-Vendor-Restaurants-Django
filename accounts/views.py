@@ -307,3 +307,37 @@ def reset_password(request):
 
     return render(request, 'accounts/reset_password.html')
 
+
+def chatbot(request):
+    from openai import OpenAI
+
+    client = OpenAI(
+        base_url="https://api.aimlapi.com/v1",
+        api_key="d25245ec15514e1db161232d4af35d7e",
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model="deepseek/deepseek-prover-v2",
+            messages=[
+                {
+                    "role": "user",
+                    "content": ''
+                }
+            ],
+            temperature=0.7,
+            top_p=0.7,
+            frequency_penalty=1,
+            max_tokens=512,  # fixed name
+        )
+
+        message = response.choices[0].message.content
+        print(f"Assistant: {message}")
+
+    except Exception as e:
+        print(f"Error during OpenAI call: {e}")
+        message = "Something went wrong."
+
+    return render(request, 'home.html', {'response': message})
+
+

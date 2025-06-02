@@ -66,6 +66,9 @@
 
     <link href="{% static 'assets/css/chatbot_style.css' %}" rel="stylesheet">
 
+    <!-- Add CSRF token for AJAX calls -->
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
 
 
     {% block css %}

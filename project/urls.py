@@ -17,6 +17,8 @@ urlpatterns = [
        path('checkout/', checkout, name='checkout'),
 
        path('orders/', include('orders.urls')),
+
+       path('api/chatbot/', views.chatbot_api, name='chatbot_api'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
