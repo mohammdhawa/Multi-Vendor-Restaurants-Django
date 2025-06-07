@@ -1,12 +1,12 @@
 <div class="user-account-nav user-account-sidebar">
     <div class="user-nav-list">
         <ul>
-            <li class="{% if '/vendor-dashboard/' == request.path or '/accounts/vendor/' == request.path %}active{% endif %}"><a href="{% url 'vendor-dashboard' %}"><i class="icon-dashboard3"></i>Dashboard</a></li>
-            <li class="{% if 'profile' in request.path %}active{% endif %}"><a href="{% url 'vprofile' %}"><i class="icon-building"></i>My Restaurant</a></li>
-            <li class="{% if 'menu-builder' in request.path %}active{% endif %}"><a href="{% url 'menu-builder' %}"><i class="icon-menu5"></i>Menu Builder</a></li>
-            <li class="{% if '/vendor-orders/' in request.path %}active{% endif %}"><a href="{% url 'vendor_orders' %}"><i class="icon-add_shopping_cart"></i>Orders</a></li>
-            <li class="{% if '/earnings/' in request.path %}active{% endif %}"><a href="{% url 'vendor_earnings' %}"><i class="icon-money"></i>Earnings</a></li>
-            <li><a class="logout-btn" href="{% url 'logout' %}"><i class="icon-log-out"></i>Signout</a></li>
+            <li class="{% if '/vendor-dashboard/' == request.path or '/accounts/vendor/' == request.path %}active{% endif %}"><a href="{% url 'vendor-dashboard' %}"><i class="icon-dashboard3"></i>Kontrol Paneli</a></li>
+            <li class="{% if 'profile' in request.path %}active{% endif %}"><a href="{% url 'vprofile' %}"><i class="icon-building"></i>Restoranım</a></li>
+            <li class="{% if 'menu-builder' in request.path %}active{% endif %}"><a href="{% url 'menu-builder' %}"><i class="icon-menu5"></i>Menü Oluşturucu</a></li>
+            <li class="{% if '/vendor-orders/' in request.path %}active{% endif %}"><a href="{% url 'vendor_orders' %}"><i class="icon-add_shopping_cart"></i>Siparişler</a></li>
+            <li class="{% if '/earnings/' in request.path %}active{% endif %}"><a href="{% url 'vendor_earnings' %}"><i class="icon-money"></i>Kazançlar</a></li>
+            <li><a class="logout-btn" href="{% url 'logout' %}"><i class="icon-log-out"></i>Çıkış Yap</a></li>
         </ul>
     </div>
 </div>

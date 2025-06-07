@@ -1,57 +1,56 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
 {% block body %}
 {% include 'includes/alerts.html' %}
 
-<!-- Main Section Start -->
+<!-- Ana Bölüm Başlangıcı -->
 <div class="main-section">
-    
+
     {% include 'customers/cover.html' %}
     <div class="page-section account-header buyer-logged-in">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                    <!-- Load the sidebar here -->
+                    <!-- Kenar çubuğunu buraya yükleyin -->
                     {% include 'includes/c_sidebar.html' %}
                 </div>
                 <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                     <div class="user-dashboard loader-holder">
                         <div class="user-holder">
-                            
+
                             <div class="container">
                                 <div class="justify-content-center row">
                                     <div class="col-md-12">
                                         <div class="bg-white p-4 text-center">
                                             <img src="{% static 'assets/logo/foodOnlineLogo.png' %}" alt="foodOnline Logo" width="300" class="mb-4">
-                                            
-                                            <!-- Error Icon -->
+
+                                            <!-- Hata Simgesi -->
                                             <div class="mb-4">
                                                 <i class="fa fa-times-circle text-danger" style="font-size: 80px;"></i>
                                             </div>
-                                            
-                                            <h2 class="text-danger mb-3">Payment Failed</h2>
-                                            <h4 class="mb-4">We encountered an issue processing your payment</h4>
-                                            
+
+                                            <h2 class="text-danger mb-3">Ödeme Başarısız</h2>
+                                            <h4 class="mb-4">Ödemenizi işlerken bir sorunla karşılaştık</h4>
+
                                             {% if error %}
                                             <div class="alert alert-danger" role="alert">
-                                                <h5>Error Details</h5>
+                                                <h5>Hata Detayları</h5>
                                                 <p class="mb-0">{{ error }}</p>
                                             </div>
                                             {% else %}
                                             <div class="alert alert-warning" role="alert">
-                                                <p class="mb-0">Your payment could not be processed. Please try again or use a different payment method.</p>
+                                                <p class="mb-0">Ödemeniz işlenemedi. Lütfen tekrar deneyin veya farklı bir ödeme yöntemi kullanın.</p>
                                             </div>
                                             {% endif %}
-                                            
+
                                             <div class="row mt-4">
                                                 <div class="col-md-4 mb-3">
                                                     <div class="card h-100">
                                                         <div class="card-body text-center">
                                                             <i class="fa fa-credit-card fa-2x text-primary mb-3"></i>
-                                                            <h6>Check Payment Details</h6>
-                                                            <p class="text-muted small">Verify your card details and billing information</p>
+                                                            <h6>Ödeme Bilgilerini Kontrol Et</h6>
+                                                            <p class="text-muted small">Kart bilgilerinizi ve fatura bilgilerinizi doğrulayın</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -59,8 +58,8 @@
                                                     <div class="card h-100">
                                                         <div class="card-body text-center">
                                                             <i class="fa fa-money fa-2x text-success mb-3"></i>
-                                                            <h6>Try Different Method</h6>
-                                                            <p class="text-muted small">Use another card or payment option</p>
+                                                            <h6>Farklı Bir Yöntem Deneyin</h6>
+                                                            <p class="text-muted small">Başka bir kart veya ödeme seçeneği kullanın</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -68,58 +67,58 @@
                                                     <div class="card h-100">
                                                         <div class="card-body text-center">
                                                             <i class="fa fa-phone fa-2x text-info mb-3"></i>
-                                                            <h6>Contact Support</h6>
-                                                            <p class="text-muted small">Get help from our customer service team</p>
+                                                            <h6>Destek ile İletişime Geçin</h6>
+                                                            <p class="text-muted small">Müşteri hizmetleri ekibimizden yardım alın</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <hr class="my-4">
-                                            
+
                                             <div class="row">
                                                 <div class="col-md-4 mb-2">
                                                     <a href="{% url 'cart' %}" class="btn btn-primary btn-lg btn-block">
-                                                        <i class="fa fa-shopping-cart mr-2"></i>Return to Cart
+                                                        <i class="fa fa-shopping-cart mr-2"></i>Sepete Geri Dön
                                                     </a>
                                                 </div>
                                                 <div class="col-md-4 mb-2">
                                                     <a href="{% url 'marketplace' %}" class="btn btn-success btn-lg btn-block">
-                                                        <i class="fa fa-home mr-2"></i>Continue Shopping
+                                                        <i class="fa fa-home mr-2"></i>Alışverişe Devam Et
                                                     </a>
                                                 </div>
                                                 <div class="col-md-4 mb-2">
                                                     <a href="{% url 'my_orders' %}" class="btn btn-info btn-lg btn-block">
-                                                        <i class="fa fa-list mr-2"></i>My Orders
+                                                        <i class="fa fa-list mr-2"></i>Siparişlerim
                                                     </a>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="mt-4">
                                                 <div class="alert alert-info" role="alert">
-                                                    <h6>Common Solutions:</h6>
+                                                    <h6>Yaygın Çözümler:</h6>
                                                     <ul class="text-left mb-0">
-                                                        <li>Ensure your card has sufficient funds</li>
-                                                        <li>Check if your card is enabled for online transactions</li>
-                                                        <li>Verify the billing address matches your card</li>
-                                                        <li>Try refreshing the page and attempting payment again</li>
+                                                        <li>Kartınızda yeterli bakiye olduğundan emin olun</li>
+                                                        <li>Kartınızın çevrimiçi işlemler için açık olduğundan emin olun</li>
+                                                        <li>Fatura adresinizin kartınızdaki adresle eşleştiğini kontrol edin</li>
+                                                        <li>Sayfayı yenileyip ödemeyi tekrar deneyin</li>
                                                     </ul>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="mt-4">
                                                 <p class="text-muted">
-                                                    <strong>Still having trouble?</strong> Contact us at 
-                                                    <a href="mailto:support@foodonline.com">support@foodonline.com</a> 
-                                                    or call +91 0011223344
+                                                    <strong>Hâlâ sorun yaşıyor musunuz?</strong> Bizimle iletişime geçin:
+                                                    <a href="mailto:support@foodonline.com">support@foodonline.com</a>
+                                                    veya +91 0011223344 numaralı telefonu arayın
                                                 </p>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -127,6 +126,6 @@
         </div>
     </div>
 </div>
-<!-- Main Section End -->
+<!-- Ana Bölüm Sonu -->
 
 {% endblock %}

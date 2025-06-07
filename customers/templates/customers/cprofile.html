@@ -19,7 +19,7 @@
                     <div class="user-dashboard loader-holder">
                         <div class="user-holder">
 
-                            <h5 class="text-uppercase">Profile Settings</h5>
+                            <h5 class="text-uppercase">Profil Ayarları</h5>
 
                             <form action="{% url 'cprofile' %}" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
@@ -45,7 +45,7 @@
                                                             </ul>
                                                         </div>
                                                         <div class="text-holder">
-                                                            <label>Update Profile Picture</label>
+                                                            <label>Profil Fotoğrafını Güncelle</label>
                                                             <div class="upload-gallery">
                                                                 {{profile_form.profile_picture}}
                                                             </div>
@@ -71,7 +71,7 @@
                                                             </ul>
                                                         </div>
                                                         <div class="text-holder">
-                                                            <label>Update Cover Photo</label>
+                                                            <label>Kapak Fotoğrafını Güncelle</label>
                                                             <div class="upload-gallery">
                                                                 {{profile_form.cover_picture}}
                                                             </div>
@@ -83,25 +83,25 @@
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>First Name *</label>
+                                                        <label>Ad *</label>
                                                         {{user_form.first_name}}
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Last Name *</label>
+                                                        <label>Soyad *</label>
                                                         {{user_form.last_name}}
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Phone Number *</label>
+                                                        <label>Telefon Numarası *</label>
                                                         {{user_form.phone_number}}
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Address *</label>
+                                                        <label>Adres *</label>
                                                         {{profile_form.address}}
                                                         <small class="text-muted float-right">powered by Google</small>
                                                     </div>
@@ -110,42 +110,42 @@
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Country *</label>
+                                                        <label>Ülke *</label>
                                                         {{profile_form.country}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>State *</label>
+                                                        <label>İl *</label>
                                                         {{profile_form.state}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>City *</label>
+                                                        <label>Şehir *</label>
                                                         {{profile_form.city}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Postal Code *</label>
+                                                        <label>Posta Kodu *</label>
                                                         {{profile_form.postal_code}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Latitude *</label>
+                                                        <label>Enlem *</label>
                                                         {{profile_form.latitude}}
                                                     </div>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <div class="field-holder">
-                                                        <label>Longitude *</label>
+                                                        <label>Boylam *</label>
                                                         {{profile_form.longitude}}
                                                     </div>
                                                 </div>

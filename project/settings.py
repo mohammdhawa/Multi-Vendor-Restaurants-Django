@@ -187,3 +187,5 @@ PAYPAL_CLIENT_ID = 'AWs6a7YzvNxQ9FrcdRBOUr-m5ELxqFCmtjwW10j8NR5UGzpakhN4wR99tzQj
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # Stripe settings
+# Stripe settings
+

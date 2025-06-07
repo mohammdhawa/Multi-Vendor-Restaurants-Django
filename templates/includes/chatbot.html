@@ -11,7 +11,7 @@
             <div class="chatbot-header">
                 <div class="chatbot-title">
                     <div class="status-dot"></div>
-                    Food Recommendation Assistant
+                    Yemek Önerisi Asistanı
                 </div>
                 <button class="minimize-btn" id="minimizeBtn">−</button>
             </div>
@@ -19,9 +19,9 @@
             <!-- Messages Container -->
             <div class="messages-container" id="messagesContainer">
                 <div class="message bot">
-                    <div class="message-avatar">AI</div>
+                    <div class="message-avatar">Yapay Zeka</div>
                     <div class="message-bubble">
-                        Hello! I'm your food recommendation assistant. I can help you find dishes based on your dietary preferences. What type of cuisine or diet are you following?
+                        Merhaba! Ben sizin yemek tavsiyesi asistanınızım. Diyet tercihlerinize göre yemekler bulmanıza yardımcı olabilirim. Hangi tür mutfağı veya diyeti takip ediyorsunuz?
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <script>
+ <script>
         class FoodChatbot {
             constructor() {
                 this.isExpanded = false;
@@ -185,8 +185,23 @@
                 const bubble = document.createElement('div');
                 bubble.className = 'message-bubble';
 
-                // Format message with line breaks
-                bubble.innerHTML = text.replace(/\n/g, '<br>');
+                // Format message with line breaks and handle HTML content for bot messages
+                if (sender === 'bot') {
+                    bubble.innerHTML = text.replace(/\n/g, '<br>');
+
+                    // Add click event listeners to food links
+                    setTimeout(() => {
+                        const foodLinks = bubble.querySelectorAll('.food-link');
+                        foodLinks.forEach(link => {
+                            link.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                this.handleFoodLinkClick(link.getAttribute('data-food-id'), link.textContent);
+                            });
+                        });
+                    }, 100);
+                } else {
+                    bubble.textContent = text;
+                }
 
                 messageDiv.appendChild(avatar);
                 messageDiv.appendChild(bubble);
@@ -195,6 +210,22 @@
                 this.messageHistory.push({ text, sender, timestamp: Date.now() });
 
                 this.scrollToBottom();
+            }
+
+            handleFoodLinkClick(foodId, foodName) {
+                // Add visual feedback to the clicked link
+                const clickedLinks = document.querySelectorAll(`[data-food-id="${foodId}"]`);
+                clickedLinks.forEach(link => {
+                    link.classList.add('clicked');
+                });
+
+                // Show confirmation message
+                this.addMessage(`Taking you to ${foodName}... 🚀`, 'bot');
+
+                // Redirect to food detail page after a short delay
+                setTimeout(() => {
+                    window.location.href = `/marketplace/${foodId}/`;
+                }, 1000);
             }
 
             showTyping() {

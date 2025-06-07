@@ -11,7 +11,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <div class="tabs-holder horizontal">
                         <ul class="stickynav-tabs nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#home"><i class="fa fa-shopping-cart text-danger"></i>Billing Address</a></li>
+                            <li class="active"><a data-toggle="tab" href="#home"><i class="fa fa-shopping-cart text-danger"></i>Fatura Adresi</a></li>
                             
                         </ul>
                         <div class="tab-content">
@@ -26,43 +26,43 @@
 
                                             <div class="row">
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    First Name: {{ form.first_name }}
+                                                    Ad: {{ form.first_name }}
                                                 </div>
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    Last Name: {{ form.last_name }}
+                                                    Soyad: {{ form.last_name }}
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    Phone Number: {{ form.phone }}
+                                                    Telefon Numarası: {{ form.phone }}
                                                 </div>
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    Email Address: {{ form.email }}
+                                                    E-posta Adresi: {{ form.email }}
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-md-12 col-sm-12 col-lg-12">
-                                                    Address: {{ form.address }}
+                                                    Adres: {{ form.address }}
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    Country: {{ form.country }}
+                                                    Ülke: {{ form.country }}
                                                 </div>
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    State: {{ form.state }}
+                                                    İl: {{ form.state }}
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    City: {{ form.city }}
+                                                    Şehir: {{ form.city }}
                                                 </div>
                                                 <div class="form-group col-md-6 col-sm-12 col-lg-6">
-                                                    Pin Code: {{ form.postal_code }}
+                                                    Posta Kodu: {{ form.postal_code }}
                                                 </div>
                                             </div>
 
@@ -104,7 +104,7 @@
                                                     </div>
 
                                                     <div class="quantity" style="display: inline-block; position: absolute; top: 50%; transform: translateY(-50%); margin-top: -10px;">
-                                                        <span>{{ item.quantity }} QTY</span>
+                                                        <span>{{ item.quantity }} Adet (Miktar)</span>
                                                     </div>
                                                     <div class="price-holder">
                                                         <span class="price">${{ item.fooditem.price }}</span>
@@ -121,7 +121,7 @@
                                     <div>
                                         <ul>
                                             <li style="list-style-type: none;">
-                                                Subtotal
+                                                Ara Toplam
                                                 <span class="price float-right">
                                                     <span class="currency">$</span>
                                                     <span id="subtotal">{{ subtotal }}</span>
@@ -129,7 +129,7 @@
                                             </li>
 
                                             <li style="list-style-type: none; font-weight: 600;">
-                                                TOTAL
+                                                TOPLAM
                                                 <span class="price float-right">
                                                     <span class="currency">$</span>
                                                     <span id="total">{{ total }}</span>
@@ -137,7 +137,7 @@
                                             </li>
 
                                             <!-- Select payment method -->
-                                            <h5>SELECT PAYMENT METHOD</h5>
+                                            <h5>ÖDEME Gec</h5>
                                             <div class="payment-method">
                                                 <label>
                                                     <input type="radio" name="payment_method" value="PayPal" checked >
@@ -147,7 +147,7 @@
                                             <span class="text-danger" id="payment-method-error"></span>
                                             <!-- Select payment method -->
 
-                                            <button onclick="return payMethodConfirm();" type="submit" class="btn btn-danger w-100 p-2 mt-3">PLACE ORDER</button>
+                                            <button onclick="return payMethodConfirm();" type="submit" class="btn btn-danger w-100 p-2 mt-3">SİPARİŞİ VER</button>
                                         </ul>
 
 

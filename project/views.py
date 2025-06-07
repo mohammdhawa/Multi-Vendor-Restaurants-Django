@@ -1,9 +1,12 @@
 from django.shortcuts import render
+
+from marketplace.models import Cart
 from vendor.models import Vendor
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.measure import D # D = Distance
 from django.contrib.gis.db.models.functions import Distance
+from menue.models import Category
 
 
 def get_or_set_current_location(request):
@@ -102,8 +105,11 @@ def chatbot_api(request):
         # Generate AI response
         bot_response = get_chatbot_response(user_message, food_context, request.user)
 
+        # Process the response to convert food links
+        processed_response = process_food_links(bot_response)
+
         return JsonResponse({
-            'response': bot_response,
+            'response': processed_response,
             'status': 'success'
         })
 
@@ -112,6 +118,30 @@ def chatbot_api(request):
     except Exception as e:
         print(f"Chatbot API Error: {e}")
         return JsonResponse({'error': 'Something went wrong'}, status=500)
+
+
+def process_food_links(response_text):
+    """
+    Convert [FOODLINK:id:name] format to clickable HTML links
+    Place this in your main views.py file
+    """
+    import re
+
+    # Pattern to match [FOODLINK:id:name]
+    pattern = r'\[FOODLINK:(\d+):([^\]]+)\]'
+
+    def replace_link(match):
+        food_id = match.group(1)
+        food_name = match.group(2)
+        vendor = FoodItem.objects.get(id=food_id).vendor
+        # Assuming your food detail URL pattern is 'food-detail/<int:id>/'
+        # Adjust this URL pattern according to your actual URL structure
+        return f'<a href="/marketplace/{vendor.slug}/" class="food-link" data-food-id="{vendor.slug}">{food_name}</a>'
+
+    # Replace all food links in the response
+    processed_text = re.sub(pattern, replace_link, response_text)
+
+    return processed_text
 
 
 def get_chatbot_response(user_message, food_context, user):
@@ -144,7 +174,7 @@ def get_chatbot_response(user_message, food_context, user):
 
     except Exception as e:
         print(f"Error during OpenAI call: {e}")
-        return "I'm sorry, I'm having trouble processing your request right now. Please try again later."
+        return "Üzgünüm, şu anda isteğinizi işleme koymada sorun yaşıyorum. Lütfen daha sonra tekrar deneyin."
 
 
 def build_system_prompt(food_context, user):
@@ -152,17 +182,23 @@ def build_system_prompt(food_context, user):
     Build system prompt for AI based on user's food history
     Place this in your main views.py file
     """
-    base_prompt = """You are a helpful food recommendation assistant for a multi-restaurant website. 
-    Your job is to recommend food items based on user's dietary preferences and restrictions.
+    base_prompt = """Sen çok restoranlı bir web sitesi için yardımcı bir yemek öneri asistanısın. 
+        Görevin, kullanıcının diyet tercihleri ve kısıtlamalarına göre yiyecek öğeleri önermektir.
 
-    Guidelines:
-    - Ask about dietary preferences (vegetarian, vegan, keto, gluten-free, etc.)
-    - Recommend specific food items from our available menu
-    - Consider user's previous orders if available
-    - Be friendly and conversational
-    - Always ask follow-up questions to better understand preferences
-    - Provide brief descriptions of recommended items
-    """
+        ÖNEMLİ: Yiyecek öğeleri önerirken, bunları **tam olarak şu formatta** tıklanabilir bağlantılar olarak biçimlendirmelisin:
+        [FOODLINK:food_id:food_name] — burada food_id gerçek kimlik, food_name ise görüntülenen isimdir.
+
+        Örnek: "Keto diyeti için mükemmel olan [FOODLINK:15:Izgara Tavuk Salatası] öğesini öneriyorum."
+
+        Kurallar:
+        - Diyet tercihlerini sor (vejetaryen, vegan, keto, glutensiz vb.)
+        - Belirli yiyecek öğelerinden bahsederken her zaman [FOODLINK:id:name] formatını kullan
+        - Varsa, kullanıcının önceki siparişlerini dikkate al
+        - Samimi ve sohbet havasında ol
+        - Tercihleri daha iyi anlamak için her zaman takip soruları sor
+        - Önerilen öğelerin kısa açıklamalarını sun
+        - Bir yanıtta birden fazla öğe önerebilirsin
+        """
 
     if user.is_authenticated:
         # Add user's previous orders context
@@ -171,14 +207,16 @@ def build_system_prompt(food_context, user):
             prev_orders = ", ".join([f"{item['fooditem']} ({item['category']})" for item in prev_items[:5]])
             base_prompt += f"\n\nUser's recent orders: {prev_orders}"
 
-        # Add available menu items
+        # Add available menu items with IDs
         all_items = food_context.get('all_fooditems', [])
         if all_items:
             menu_items = []
             for item in all_items[:20]:  # Limit to avoid token overflow
-                menu_items.append(f"{item['fooditem']} - {item['category']}: {item['description'][:50]}...")
+                menu_items.append(
+                    f"ID:{item['id']} - {item['fooditem']} - {item['category']}: {item['description'][:50]}...")
 
-            base_prompt += f"\n\nAvailable menu items:\n" + "\n".join(menu_items)
+            base_prompt += f"\n\nAvailable menu items (use the ID numbers in your recommendations):\n" + "\n".join(
+                menu_items)
     else:
         base_prompt += "\n\nUser is not logged in. Encourage them to sign up for personalized recommendations."
 
@@ -223,3 +261,44 @@ def food_data(request):
     }
 
     return context
+
+
+def food_detail(request, food_id):
+    """
+    Food detail view - create this if you don't have it already
+    Place this in your main views.py file
+    """
+    try:
+        food_item = FoodItem.objects.get(id=food_id)
+        vendor = food_item.vendor
+        categories = Category.objects.filter(vendor=vendor).prefetch_related(
+                    Prefetch('category_food_item', queryset=FoodItem.objects.filter(is_available=True))
+                )
+        cart_items = Cart.objects.filter(user=request.user)
+        context = {
+            'vendor': vendor,
+            'categories': categories,
+            'cart_items': cart_items,
+        }
+        return render(request, 'marketplace/vendor_detail.html', context)
+    except FoodItem.DoesNotExist:
+        return render(request, '404.html', status=404)
+
+# def vendor_detail(request, slug):
+#     vendor = get_object_or_404(Vendor, slug=slug)
+#     categories = Category.objects.filter(vendor=vendor).prefetch_related(
+#         Prefetch('category_food_item', queryset=FoodItem.objects.filter(is_available=True))
+#     )
+#
+#     if request.user.is_authenticated:
+#         cart_items = Cart.objects.filter(user=request.user)
+#         print('Cart items:')
+#         print(cart_items)
+#     else:
+#         cart_items = None
+#     context = {
+#         'vendor': vendor,
+#         'categories': categories,
+#         'cart_items': cart_items,
+#     }
+#     return render(request, 'marketplace/vendor_detail.html', context)

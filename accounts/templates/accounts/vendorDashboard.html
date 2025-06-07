@@ -62,12 +62,12 @@
                         <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
                             <div class="user-dashboard loader-holder">
                                 <div class="user-holder">
-                                    <h5 class="text-uppercase">Overview</h5>
+                                    <h5 class="text-uppercase">Genel Bakış</h5>
                                     <div class="row h3 text-center">
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                             <div class="card">
                                                 <div class="card-header">
-                                                    Total Orders
+                                                    Toplam Sipariş
                                                 </div>
                                                 <div class="card-body text-center">
                                                     <a href="{% url 'vendor_orders' %}" style="color: black; text-decoration: none;"><h3 class="card-title">{{ total_orders }}</h3></a>
@@ -78,7 +78,7 @@
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                             <div class="card">
                                                 <div class="card-header">
-                                                    Total Revenue
+                                                    Toplam Gelir
                                                 </div>
                                                 <div class="card-body text-center">
                                                     <a href="{% url 'vendor_orders' %}" style="color: black; text-decoration: none;"><h3 class="card-title">${{ total_revenue|floatformat:2 }}</h3></a>
@@ -89,7 +89,7 @@
                                         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                             <div class="card">
                                                 <div class="card-header">
-                                                    This Month
+                                                    Bu Ay
                                                 </div>
                                                 <div class="card-body text-center">
                                                     <a href="{% url 'vendor_orders' %}" style="color: black; text-decoration: none;"><h3 class="card-title">${{ current_month_revenue|floatformat:2 }}</h3></a>
@@ -104,7 +104,7 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="row">
                                             <div class="element-title has-border right-filters-row">
-                                                <h5>Recent Orders</h5>
+                                                <h5>Son Siparişler</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -114,12 +114,12 @@
                                                 <div class="responsive-table">
                                                     <ul class="table-generic">
                                                         <li class="order-heading-titles">
-                                                            <div>Order id</div>
-                                                            <div>Date</div>
-                                                            <div>Total Price</div>
-                                                            <div>Charges</div>
-                                                            <div>Received</div>
-                                                            <div>Status</div>
+                                                            <div>Sipariş No</div>
+                                                            <div>Tarih</div>
+                                                            <div>Toplam Fiyat</div>
+                                                            <div>Ücretler</div>
+                                                            <div>Alınan</div>
+                                                            <div>Durum</div>
                                                         </li>
                                                         {% for order in recent_orders %}
                                                         <li class="order-heading-titles">
@@ -145,7 +145,7 @@
                                                         {% empty %}
                                                         <li class="order-heading-titles">
                                                             <div colspan="6" style="text-align: center; padding: 20px;">
-                                                                <p>No orders found.</p>
+                                                                <p>Sipariş bulunamadı.</p>
                                                             </div>
                                                         </li>
                                                         {% endfor %}

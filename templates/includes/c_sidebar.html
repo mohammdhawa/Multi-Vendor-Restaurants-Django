@@ -1,10 +1,10 @@
 <div class="user-account-nav user-account-sidebar">
     <div class="user-nav-list">
         <ul>
-            <li class="{% if '/customerDashboard/' == request.path or '/customer/' == request.path %}active{% endif %}"><a href="{% url 'customer' %}"><i class="icon-dashboard3"></i>Dashboard</a></li>
-            <li class="{% if '/my-orders/' in request.path %}active{% endif %}"><a href="{% url 'my-orders' %}" class="btn-edit-profile"><i class="icon-add_shopping_cart"></i>My Orders</a></li>
-            <li class="{% if '/profile/' in request.path %}active{% endif %}"><a href="{% url 'cprofile' %}" class="btn-edit-profile"><i class="icon-build"></i>Profile Settings</a></li>
-            <li><a href="{% url 'logout' %}"><i class="icon-log-out"></i>Sign out</a></li>
+            <li class="{% if '/customerDashboard/' == request.path or '/customer/' == request.path %}active{% endif %}"><a href="{% url 'customer' %}"><i class="icon-dashboard3"></i>Kontrol Paneli</a></li>
+            <li class="{% if '/my-orders/' in request.path %}active{% endif %}"><a href="{% url 'my-orders' %}" class="btn-edit-profile"><i class="icon-add_shopping_cart"></i>Siparişlerim</a></li>
+            <li class="{% if '/profile/' in request.path %}active{% endif %}"><a href="{% url 'cprofile' %}" class="btn-edit-profile"><i class="icon-build"></i>Profil Ayarları</a></li>
+            <li><a href="{% url 'logout' %}"><i class="icon-log-out"></i>Çıkış Yap</a></li>
         </ul>
     </div>
 </div>

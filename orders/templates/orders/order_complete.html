@@ -9,7 +9,7 @@
                 <img src="{% static 'assets/logo/foodOnlineLogo.png' %}" alt="foodOnline Logo" width="300">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 class="mt-2 mb-3">Thank you for your order.</h4>
+                        <h4 class="mt-2 mb-3">Siparişiniz için teşekkür ederiz.</h4>
                     </div>
                     <div class="col-md-6 text-right">
                         <p class="mb-0">{{ order.first_name }} {{ order.last_name }}</p>
@@ -19,22 +19,22 @@
                     </div>
                 </div>
 
-                <h6>Hello {{ order.first_name }} {{ order.last_name }}, </h6><span>Review your order details below.</span>
+                <h6>Merhaba {{ order.first_name }} {{ order.last_name }}, </h6><span>Aşağıdan sipariş detaylarınızı inceleyebilirsiniz.</span>
                 <hr>
 
                 <div class="d-flex justify-content-between">
                     <div>
-                        <span class="d-block">Order Date: </span><span class="font-weight-bold">{{ order.created_at }}</span>
+                        <span class="d-block">Sipariş Tarihi: </span><span class="font-weight-bold">{{ order.created_at }}</span>
                     </div>
                     <div>
-                        <span class="d-block">Order No: </span><span class="font-weight-bold">{{ order.order_number }}</span>
+                        <span class="d-block">Sipariş No: </span><span class="font-weight-bold">{{ order.order_number }}</span>
                     </div>
                     <div>
-                        <span class="d-block">Payment Method: </span><span class="font-weight-bold">{{ order.payment_method }}</span>
+                        <span class="d-block">Ödeme Yöntemi: </span><span class="font-weight-bold">{{ order.payment_method }}</span>
                     </div>
                     {% if order.payment.transaction_id %}
                     <div>
-                        <span class="d-block">Transaction ID: </span><span class="font-weight-bold">{{ order.payment.transaction_id }}</span>
+                        <span class="d-block">İşlem Numarası: </span><span class="font-weight-bold">{{ order.payment.transaction_id }}</span>
                     </div>
                     {% endif %}
                 </div>
@@ -43,12 +43,12 @@
                     <tbody>
                         {% for item in ordered_food %}
                         <tr>
-                            <td><img src="{{ item.fooditem.image.url }}" width="60" alt="Food Image"></td>
+                            <td><img src="{{ item.fooditem.image.url }}" width="60" alt="Yemek Resmi"></td>
                             <td>
                                 <p class="mb-0"><b>{{ item.fooditem }}</b></p>
                                 <a class="text-muted" href="{% url 'vendor-detail' item.fooditem.vendor.slug %}">{{ item.fooditem.vendor.vendor_name }}</a>
                             </td>
-                            <td>{{ item.quantity }} QTY</td>
+                            <td>{{ item.quantity }} ADET</td>
                             <td>${{ item.fooditem.price }}</td>
                         </tr>
                         {% endfor %}
@@ -62,7 +62,7 @@
                     <div class="col-md-6">
                         <ul>
                             <li style="list-style-type: none;">
-                                Subtotal
+                                Ara Toplam
                                 <span class="price float-right">
                                     <span class="currency">$</span>
                                     <span id="subtotal">{{ subtotal }}</span>
@@ -82,7 +82,7 @@
                             {% endfor %}
 
                             <li style="list-style-type: none; font-weight: 600;">
-                                TOTAL
+                                TOPLAM
                                 <span class="price float-right">
                                     <span class="currency">$</span>
                                     <span id="total">{{ order.total }}</span>
@@ -94,12 +94,12 @@
                 <hr>
                 <div class="d-flex justify-content-between">
                     <div>
-                        <span class="d-block font-weight-bold">Thanks for ordering with us.</span>
-                        <span>FoodOnline Team</span>
+                        <span class="d-block font-weight-bold">Bizden sipariş verdiğiniz için teşekkür ederiz.</span>
+                        <span>FoodOnline Ekibi</span>
                     </div>
                     <div class="d-flex justify-content-end align-items-end">
-                        <span class="d-block font-weight-bold">Need help?</span>
-                        <span>Call - +91 0011223344</span>
+                        <span class="d-block font-weight-bold">Yardıma mı ihtiyacınız var?</span>
+                        <span>Arayın - +91 0011223344</span>
                     </div>
                 </div>
             </div>

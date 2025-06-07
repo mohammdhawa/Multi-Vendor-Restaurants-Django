@@ -14,7 +14,7 @@
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <div class="tabs-holder horizontal">
                         <ul class="stickynav-tabs nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#home"><i class="fa fa-credit-card text-danger"></i>Complete Your Payment</a></li>
+                            <li class="active"><a data-toggle="tab" href="#home"><i class="fa fa-credit-card text-danger"></i>Ödemenizi Tamamlayın</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="home" class="tab-pane in active">
@@ -29,7 +29,7 @@
                                             <div><b>Email: </b>{{ order_data.email }}</div>
                                             <div><b>Payment: </b>Credit Card (Stripe)</div>
                                             <br>
-                                            <div><a href="{% url 'checkout' %}" class="btn btn-outline-danger">Edit Details</a></div>
+                                            <div><a href="{% url 'checkout' %}" class="btn btn-outline-danger">Bilgileri Düzenle</a></div>
                                             <br>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <div class="tabs-holder horizontal">
                         <ul class="stickynav-tabs nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-room_service"></i>Your Order</a></li>
+                            <li class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-room_service"></i>Siparişiniz</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="home" class="tab-pane in active">
@@ -82,13 +82,13 @@
                                             <!-- Stripe Checkout Button -->
                                             <div class="mt-3">
                                                 <button id="stripe-checkout-button" class="btn btn-success btn-block btn-lg">
-                                                    <i class="fa fa-credit-card"></i> Pay ${{ grand_total }} Now
+                                                    <i class="fa fa-credit-card"></i> Öde ${{ grand_total }} Simdi
                                                 </button>
                                                 <div id="stripe-error-message" class="text-danger mt-2" style="display: none;"></div>
                                             </div>
 
                                             <div class="mt-2 text-center">
-                                                <small class="text-muted">Secure payment powered by Stripe</small>
+                                                <small class="text-muted">Stripe altyapısıyla güvenli ödeme</small>
                                             </div>
                                         </ul>
                                     </div>
