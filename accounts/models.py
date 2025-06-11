@@ -48,11 +48,20 @@ class User(AbstractBaseUser):
         (CUSTOMER, 'CUSTOMER'),
     )
 
+    SEX_CHOICES = (
+    ('Erkek', 'Erkek'),
+    ('Kadin', 'Kadin'),
+    )
+
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=50, unique=True)
     phone_number = models.CharField(max_length=12, blank=True, null=True)
+    length = models.IntegerField(blank=True, null=True)
+    weight = models.IntegerField(blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    sex = models.CharField(choices=SEX_CHOICES, max_length=10, blank=True, null=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
 
     # Required Fields

@@ -7,6 +7,7 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.measure import D # D = Distance
 from django.contrib.gis.db.models.functions import Distance
 from menue.models import Category
+import re
 
 
 def get_or_set_current_location(request):
@@ -85,7 +86,6 @@ from orders.models import Order, OrderFood, FoodItem
 def chatbot_api(request):
     """
     API endpoint for chatbot communication
-    Place this in your main views.py file
     """
     if request.method != 'POST':
         return JsonResponse({'error': 'Only POST method allowed'}, status=405)
@@ -97,7 +97,7 @@ def chatbot_api(request):
         if not user_message:
             return JsonResponse({'error': 'Message is required'}, status=400)
 
-        # Get user's food history and preferences
+        # Get user's food history, preferences, and profile
         food_context = {}
         if request.user.is_authenticated:
             food_context = food_data(request)
@@ -123,38 +123,31 @@ def chatbot_api(request):
 def process_food_links(response_text):
     """
     Convert [FOODLINK:id:name] format to clickable HTML links
-    Place this in your main views.py file
     """
-    import re
-
-    # Pattern to match [FOODLINK:id:name]
     pattern = r'\[FOODLINK:(\d+):([^\]]+)\]'
 
     def replace_link(match):
         food_id = match.group(1)
         food_name = match.group(2)
-        vendor = FoodItem.objects.get(id=food_id).vendor
-        # Assuming your food detail URL pattern is 'food-detail/<int:id>/'
-        # Adjust this URL pattern according to your actual URL structure
-        return f'<a href="/marketplace/{vendor.slug}/" class="food-link" data-food-id="{vendor.slug}">{food_name}</a>'
+        try:
+            vendor = FoodItem.objects.get(id=food_id).vendor
+            return f'<a href="/marketplace/{vendor.slug}/" class="food-link" data-food-id="{vendor.slug}">{food_name}</a>'
+        except FoodItem.DoesNotExist:
+            return food_name  # Fallback if food item not found
 
-    # Replace all food links in the response
     processed_text = re.sub(pattern, replace_link, response_text)
-
     return processed_text
 
 
 def get_chatbot_response(user_message, food_context, user):
     """
     Generate chatbot response using AI API
-    Place this in your main views.py file
     """
     client = OpenAI(
         base_url="https://api.aimlapi.com/v1",
         api_key="d25245ec15514e1db161232d4af35d7e",
     )
 
-    # Build context for AI
     system_prompt = build_system_prompt(food_context, user)
 
     try:
@@ -169,7 +162,6 @@ def get_chatbot_response(user_message, food_context, user):
             frequency_penalty=1,
             max_tokens=512,
         )
-
         return response.choices[0].message.content
 
     except Exception as e:
@@ -179,19 +171,20 @@ def get_chatbot_response(user_message, food_context, user):
 
 def build_system_prompt(food_context, user):
     """
-    Build system prompt for AI based on user's food history
-    Place this in your main views.py file
+    Build system prompt for AI based on user's food history and profile
     """
     base_prompt = """Sen çok restoranlı bir web sitesi için yardımcı bir yemek öneri asistanısın. 
-        Görevin, kullanıcının diyet tercihleri ve kısıtlamalarına göre yiyecek öğeleri önermektir.
+        Görevin, kullanıcının diyet tercihleri, fiziksel özellikleri (boy, kilo, yaş, cinsiyet) ve geçmiş yemek seçimlerine göre kişiselleştirilmiş yiyecek öğeleri önermektir.
 
-        ÖNEMLİ: Yiyecek öğeleri önerirken, bunları **tam olarak şu formatta** tıklanabilir bağlantılar olarak biçimlendirmelisin:
+        ÖNEMLİ: İlk olarak, kullanıcının dünkü yemeklerini ve tercih ettiği yemek türünü (vejetaryen, vegan, keto, glutensiz vb.) sor. Ardından, öneriler sunarken kullanıcının boy, kilo, yaş ve cinsiyet bilgilerini dikkate al. 
+        Yiyecek öğeleri önerirken, bunları **tam olarak şu formatta** tıklanabilir bağlantılar olarak biçimlendirmelisin:
         [FOODLINK:food_id:food_name] — burada food_id gerçek kimlik, food_name ise görüntülenen isimdir.
 
         Örnek: "Keto diyeti için mükemmel olan [FOODLINK:15:Izgara Tavuk Salatası] öğesini öneriyorum."
 
         Kurallar:
-        - Diyet tercihlerini sor (vejetaryen, vegan, keto, glutensiz vb.)
+        - Kullanıcının dünkü yemeklerini ve tercih ettiği yemek türünü sor
+        - Kullanıcının boy, kilo, yaş ve cinsiyet bilgilerini dikkate al
         - Belirli yiyecek öğelerinden bahsederken her zaman [FOODLINK:id:name] formatını kullan
         - Varsa, kullanıcının önceki siparişlerini dikkate al
         - Samimi ve sohbet havasında ol
@@ -201,31 +194,31 @@ def build_system_prompt(food_context, user):
         """
 
     if user.is_authenticated:
+        # Add user's profile information
+        profile_info = ""
+        if hasattr(user, 'profile'):
+            profile = user
+            profile_info = f"User's profile: Height: {profile.length or 'unknown'} cm, Weight: {profile.weight or 'unknown'} kg, Age: {profile.age or 'unknown'}, Sex: {profile.sex or 'unknown'}"
+
         # Add user's previous orders context
         prev_items = food_context.get('prev_fooditems', [])
-        if prev_items:
-            prev_orders = ", ".join([f"{item['fooditem']} ({item['category']})" for item in prev_items[:5]])
-            base_prompt += f"\n\nUser's recent orders: {prev_orders}"
+        prev_orders = ", ".join([f"{item['fooditem']} ({item['category']})" for item in prev_items[:5]]) if prev_items else "No previous orders"
+        base_prompt += f"\n\n{profile_info}\nUser's recent orders: {prev_orders}"
 
         # Add available menu items with IDs
         all_items = food_context.get('all_fooditems', [])
         if all_items:
-            menu_items = []
-            for item in all_items[:20]:  # Limit to avoid token overflow
-                menu_items.append(
-                    f"ID:{item['id']} - {item['fooditem']} - {item['category']}: {item['description'][:50]}...")
-
-            base_prompt += f"\n\nAvailable menu items (use the ID numbers in your recommendations):\n" + "\n".join(
-                menu_items)
+            menu_items = [f"ID:{item['id']} - {item['fooditem']} - {item['category']}: {item['description'][:50]}..." for item in all_items[:20]]
+            base_prompt += f"\n\nAvailable menu items (use the ID numbers in your recommendations):\n" + "\n".join(menu_items)
     else:
-        base_prompt += "\n\nUser is not logged in. Encourage them to sign up for personalized recommendations."
+        base_prompt += "\n\nUser is not logged in. Ask for their height, weight, age, sex, yesterday's meals, and food preferences to provide personalized recommendations. Encourage them to sign up for better personalization."
 
     return base_prompt
 
 
 def food_data(request):
     """
-    Your existing food_data function - keep as is
+    Retrieve user's food history and menu items
     """
     order_foods = OrderFood.objects.filter(
         user=request.user,
@@ -265,15 +258,14 @@ def food_data(request):
 
 def food_detail(request, food_id):
     """
-    Food detail view - create this if you don't have it already
-    Place this in your main views.py file
+    Food detail view
     """
     try:
         food_item = FoodItem.objects.get(id=food_id)
         vendor = food_item.vendor
         categories = Category.objects.filter(vendor=vendor).prefetch_related(
-                    Prefetch('category_food_item', queryset=FoodItem.objects.filter(is_available=True))
-                )
+            Prefetch('category_food_item', queryset=FoodItem.objects.filter(is_available=True))
+        )
         cart_items = Cart.objects.filter(user=request.user)
         context = {
             'vendor': vendor,
@@ -283,22 +275,3 @@ def food_detail(request, food_id):
         return render(request, 'marketplace/vendor_detail.html', context)
     except FoodItem.DoesNotExist:
         return render(request, '404.html', status=404)
-
-# def vendor_detail(request, slug):
-#     vendor = get_object_or_404(Vendor, slug=slug)
-#     categories = Category.objects.filter(vendor=vendor).prefetch_related(
-#         Prefetch('category_food_item', queryset=FoodItem.objects.filter(is_available=True))
-#     )
-#
-#     if request.user.is_authenticated:
-#         cart_items = Cart.objects.filter(user=request.user)
-#         print('Cart items:')
-#         print(cart_items)
-#     else:
-#         cart_items = None
-#     context = {
-#         'vendor': vendor,
-#         'categories': categories,
-#         'cart_items': cart_items,
-#     }
-#     return render(request, 'marketplace/vendor_detail.html', context)
